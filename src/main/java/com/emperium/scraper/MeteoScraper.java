@@ -1,10 +1,8 @@
 package com.emperium.scraper;
 
-import com.emperium.DAO.*;
-import com.emperium.domainToModelAdapter.Adapter;
+import com.emperium.dao.db.*;
 import com.emperium.model.City;
 import com.emperium.model.Day;
-import com.emperium.model.Measurement;
 import com.emperium.scheduler.ScrapeScheduler;
 import com.emperium.utils.Mappings;
 import org.apache.log4j.Logger;
@@ -13,8 +11,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.SchedulerException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -22,19 +18,13 @@ import java.util.logging.Level;
 
 public class MeteoScraper implements Job {
 
-    private Adapter adapter = new Adapter();
-    private Logger logger = Logger.getLogger(ScrapeScheduler.class);
-
-    private Day modelDay;
-    private Measurement modelMeasurements;
-
+    private Logger logger = Logger.getLogger(MeteoScraper.class);
     private CityDAO cityDAO = new CityDAOImpl();
-    private DayDAO dayDAO = new DayDAOImpl();
-    private MeasurementDAO measurementsDAO = new MeasurementDaoImpl();
+    private DayDbDAO dayDbDAO = new DayDbDAOImpl();
+    private PredictionsDAO measurementsDAO = new PredictionsDaoImpl();
+    private City modelCity;
 
     private int city_id;
-
-    private com.emperium.domain.City ct;
 
     public void init() throws SchedulerException {
         loggerConfig();
@@ -51,23 +41,25 @@ public class MeteoScraper implements Job {
             CityScraper cityScraper = new CityScraper(ck);
             cityScraper.scrapeCity();
 
-            ct = cityScraper.getCity();
+             modelCity = cityScraper.getCity();
+            /* The first time ever the application is run, City table will be empty.
+            * from the second time and onwards it will never be empty. We check here in order
+            * only to move to predictions*/
+            if(cityIsSet.test(modelCity.getName())) {
+                city_id = cityDAO.getCityId(modelCity.getName());
 
-            if(cityIsSet.test(ct.getName())) {
-                city_id = cityDAO.getCityId(ct.getName());
+                modelCity.getDays().forEach(day -> {
 
-                ct.getDays().forEach(domainDay -> {
-
-                    if(dayIsSet.test(domainDay.getDate(), city_id)) {
-                        int day_id = dayDAO.getDayId(domainDay.getDate(), city_id);
+                    if(dayIsSet.test(day.getDay(), city_id)) {
+                        int day_id = dayDbDAO.getDayId(day.getDay(), city_id);
 
                         if (dailyMeasurementsAreSet.test(day_id)) {
-                            measurementsDAO.checkAndUpdateDailyMeasurement(day_id, domainDay.getMeasurements());
+                            measurementsDAO.checkAndUpdateDailyPredictions(day_id, day.getPredictions());
                         } else {
-                            measurementsDAO.setDailyMeasurements(domainDay.getMeasurements(), day_id);
+                            measurementsDAO.setDailyPredictions(day.getPredictions(), day_id);
                         }
                     } else {
-                        insertRecords(true, domainDay);
+                        insertRecords(true, day);
                     }
                 });
                 deletePreviousMeasurements.accept(city_id);
@@ -80,49 +72,21 @@ public class MeteoScraper implements Job {
         }
     }
 
-    public Predicate<String> cityIsSet = city -> cityDAO.cityIsSet(city);
+    public Predicate<String> cityIsSet = city -> cityDAO.isCitySet(city);
 
-    public BiPredicate<LocalDate, Integer> dayIsSet = (date, city_id) -> dayDAO.dayIsSet(date, city_id);
+    public BiPredicate<LocalDate, Integer> dayIsSet = (date, city_id) -> dayDbDAO.isDaySet(date, city_id);
 
-    public Predicate<Integer> dailyMeasurementsAreSet = day_id -> measurementsDAO.measurementsAreSet(day_id);
+    public Predicate<Integer> dailyMeasurementsAreSet = day_id -> measurementsDAO.isPredictionsSet(day_id);
 
     private Consumer<Integer> deletePreviousMeasurements = city_id -> measurementsDAO.deleteByCityId(city_id);
 
-    private Consumer<Integer> deletePreviousDays = city_id -> dayDAO.deleteById(city_id);
+    private Consumer<Integer> deletePreviousDays = city_id -> dayDbDAO.deleteById(city_id);
 
-    private void insertRecords(boolean cityExists, com.emperium.domain.Day day) {
-
+    private void insertRecords(boolean cityExists, Day day) {
         if(cityExists) {
-            City city = cityDAO.getCityById(this.city_id);
-
-            modelDay = adapter.domainDayToModelAdapter(day, new ArrayList<>());
-
-            day.getMeasurements().forEach(ms -> {
-                modelMeasurements = adapter.domainMeasurementsToModelAdapter(ms, new Measurement());
-
-                modelMeasurements.setDay(modelDay);
-                modelDay.getMeasurements().add(modelMeasurements);
-            });
-
-            dayDAO.insertRecords(modelDay, city);
-
+        City city = cityDAO.getCityById(city_id);
+            dayDbDAO.insertRecords(day, city);
         } else {
-            List<Day> ORMDays = new ArrayList<>();
-
-            ct.getDays().forEach(domainDay -> {
-                List<Measurement> ORMMeasurements = new ArrayList<>();
-
-                domainDay.getMeasurements().forEach(m -> {
-                    modelMeasurements = adapter.domainMeasurementsToModelAdapter(m, new Measurement());
-                    ORMMeasurements.add(modelMeasurements);
-                });
-
-                modelDay = adapter.domainDayToModelAdapter(domainDay, ORMMeasurements);
-                ORMDays.add(modelDay);
-
-            });
-            City modelCity = adapter.domainCityToModelAdapter(ct, ORMDays);
-
             cityDAO.saveCity(modelCity);
         }
     }
@@ -161,7 +125,7 @@ public class MeteoScraper implements Job {
     }
 
     private void loggerConfig() {
-        /** Disable HtmlUnit logging */
+        /* Disable HtmlUnit logging */
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
     }

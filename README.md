@@ -18,21 +18,21 @@
 ## About The Project
 
 This project was developed for fun :laughing: . It is an implementation of scraping 
-with the use of HtmlUnit library. Quartz Scheduler is used for scheduling the tasks at a specific time 
-of the day. As soon as the scheduler starts it scrapes [Meteo](https://www.meteo.gr) website and fetches all 
-prediction measurements (time, temperature, humidity, wind speed, phenomenon) for every day of every city in Greece. 
-The values scraped are saved in a relational database. Endpoints are then exposed so that the end user can view the 
-meteorological predictions of the upcoming days for every individual city and day available. 
-Thus this application does not provide actual meteorological measurements but predictions scraped 
-from [Meteo](https://www.meteo.gr). 
+with the use of HtmlUnit library. A cron job is set, with the use of Quartz Scheduler, and scraping starts automatically
+in a specified time every day. As soon as the scheduler starts it scrapes [Meteo](https://www.meteo.gr) website and fetches all 
+predictions measurement (time, temperature, humidity, wind speed, phenomenon) for every day - in 3-hour time intervals 
+of every city in Greece. The values scraped are saved in a relational database. 
+Endpoints are then exposed so that the end user can view the meteorological predictions of current day and also the 
+upcoming days for every individual city and day available. 
+Thus this application provides actual meteorological predictions.
  
 ### Built With
 
-* [Java 11](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html)
+* [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 * [Maven](https://maven.apache.org/)
 * [HtmlUnit](https://htmlunit.sourceforge.io/)
 * [Hibernate 5.4](https://hibernate.org/orm/releases/5.4/)
-* [Quarzt Scheduler](http://www.quartz-scheduler.org/)
+* [Quartz Scheduler](http://www.quartz-scheduler.org/)
 * [Grizzly HttpServer](https://javaee.github.io/grizzly/)
 * [Jersey 2](https://eclipse-ee4j.github.io/jersey/)
 * [Apache Lucene](https://lucene.apache.org/)
@@ -42,8 +42,8 @@ from [Meteo](https://www.meteo.gr).
 
 ## Getting Started
 
-A Cron job has been set up so that the application runs at 23:55 every night. You can change that in ScrapeScheduler class and make
-it run at any time desired, even multiple times a day. 
+A Cron job has been set up so that the application runs at 23:55 every night. You can change that in ScrapeScheduler
+class and make it run at any time desired, even multiple times a day.
 
 ### Prerequisites
 This application utilizes docker and docker compose for deployment. Install [Docker](https://docs.docker.com/get-docker/) 
@@ -61,29 +61,32 @@ git clone https://github.com/StefanosAnastasiou/meteo-scraper-api.git
 ```
 2. cd into the directory
 
-3. Adapt where necessary the username and password for the database in docker-compose.yml file 
+3. Go to docker-compose.yml file and adapt the ```sh DATABASE_USERNAME ``` and ```sh DATABASE_PASSWORD```
  
-4. Install the application 
+4. Build the application 
 ```sh
 mvn clean install
 ```
 
-5. Build the weather application image
+5. Build application image
 ```sh
 docker build . -t meteo-scraper-api:latest
 ```
 
-6. Run docker compose to start the containers
+6. Run docker compose to start the containers - mysql, nginx and the application itself
 ```sh 
 docker-compose -up
 ``` 
 
 ## Usage
 
-Three endpoints are exposed in this application. The first one is fetching all predictions for a specified city from 
-the time the request is made and onwards. One is fetching all predictions for a city for a specific day
-and the other is fetching predictions for a city, for a specific time a day. You can use Postman for the request, 
-or even a browser. 
+Three endpoints are exposed for the weather predictions. The first one is fetching all predictions for a specified 
+city from the time the request is made and onwards (e.g. if scraping is scheduled to start at 18:25, for the first day
+it will scrape values until midnight). 
+One endpoint is fetching all predictions for a city that are available in the database from the time the request was 
+done and onwards, one endpoint is fetching predictions for a specific city and date
+and the other is fetching predictions for a city, for a specific time a day. Various tools can be used for the request, 
+postman, insomnia, curl etc.
 
 Example request that fetches all predictions available for a specified city:
 ```sh
@@ -92,13 +95,38 @@ http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ
 
 Example request that fetches predictions for a city for a specific day:
 ```sh
-http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2020-10-03
+http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20
 ```
 
 Example request that fetches predictions for a city, for a given time of a day: 
 ```sh
-http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2020-10-03/21:00:00
+http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20/21:00:00
 ```
+
+All the city names are also kept in a Lucene index so that they can be searched fast without having to query the 
+database. For this operation an endpoint is exposed e.g. :
+
+```sh
+http://your_domain/suggest/ΒΟΛ
+```
+
+This will return all the available cities that contain "ΒΟΛ" e.g.
+
+```yaml
+[
+  {
+    "city": "ΒΟΛΟΣ",
+    "id": "33"
+  },
+  {
+    "city": "ΜΕΓΑΛΗ ΒΟΛΒΗ",
+    "id": "253"
+  }
+]
+```
+
+This makes easy future frontend applications to search for cities fast without having to query.
+
 
 ## Contributing
 
@@ -127,7 +155,7 @@ Project Link: [https://github.com/stefanosAnastasiou/meteo-scraper-api](https://
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
 
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
+[license-shield]: https://img.shields.io/badge/license-MIT-green    
 [license-url]: https://choosealicense.com/licenses/mit/
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/stefanosanastasiou/

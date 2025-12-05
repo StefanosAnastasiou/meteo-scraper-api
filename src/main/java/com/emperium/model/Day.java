@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Model class representing the Day table in the database
+ */
 @Entity(name = "Day")
 @Table(name = "Day", uniqueConstraints = {
         @UniqueConstraint(columnNames = "id")
@@ -28,7 +31,7 @@ public class Day implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "day_id")
     @OrderBy("time")
-    List<Measurement> measurements;
+    List<Predictions> predictions;
 
     public Integer getId() {
         return id;
@@ -54,11 +57,11 @@ public class Day implements Serializable {
         this.city = city;
     }
 
-    public List<Measurement> getMeasurements() {
-        return measurements;
+    public List<Predictions> getPredictions() {
+        return predictions;
     }
 
-    public void setMeasurements(List<Measurement> measurements) {
-        this.measurements = measurements;
+    public void setPredictions(List<Predictions> predictions) {
+        this.predictions = predictions;
     }
 }

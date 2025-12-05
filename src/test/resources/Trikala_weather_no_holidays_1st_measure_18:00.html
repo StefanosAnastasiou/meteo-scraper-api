@@ -3230,7 +3230,7 @@
                     K3 = Math.floor( Math.floor( ( YY / 100 ) + 49 ) * 0.75 ) - 38;
                     JD = K1 + K2 + D + 59; // for dates in Julian calendar
                     if( JD > 2299160 ) JD = JD - K3; // for Gregorian calendar
-// calculate moon's age in days
+// calculate moon's age in dayDTOS
                     IP = normalize( ( JD - 2451550.1 ) / 29.530588853 );
                     AG = IP*29.53;
                     if( AG < 1.84566 ) Phase = "Moonnew";

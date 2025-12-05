@@ -1,9 +1,9 @@
 package com.emperium.utils;
 
-import com.emperium.domain.Measurement;
-import com.emperium.hibernate.HibernateAnnotationUtil;
+import com.emperium.config.HibernateAnnotationUtil;
 import com.emperium.model.City;
 import com.emperium.model.Day;
+import com.emperium.model.Predictions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -20,10 +20,11 @@ public class SQL {
 
     private static SQL instance;
 
-    private SQL(){}
+    private SQL() {
+    }
 
     public static SQL getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new SQL();
         }
         return instance;
@@ -53,14 +54,20 @@ public class SQL {
             " JOIN City AS C on D.city_id = C.id where C.city=:city" +
             " AND D.day >= current_date and M.id >= (SELECT MeasurementId(city))";
 
+    private static final String TEMPERATURE = "temperature";
+    private static final String HUMIDITY = "humidity";
+    private static final String WIND = "wind";
+    private static final String PHENOMENO = "phenomeno";
+    private static final String DAY = "day";
+    private static final String TIME = "time";
+    private static final String CITY = "city";
+
 
     private SessionFactory sessionFactory() {
         SessionFactory sessionFactory = HibernateAnnotationUtil.getSessionFactory();
 
         return sessionFactory;
     }
-
-    private SessionFactory sessFactory = sessionFactory();
 
     /**
      * Gets the id of a specified city.
@@ -69,9 +76,9 @@ public class SQL {
      * @return the id
      */
     public int getCityId(String city) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Query query = session.createSQLQuery("SELECT id FROM City WHERE city=:city");
-        query.setParameter("city", city);
+        query.setParameter(CITY, city);
         List<Object> results = query.getResultList();
         session.close();
 
@@ -85,7 +92,7 @@ public class SQL {
      * @return true if measurements are set
      */
     public boolean dailyMeasurementsAreSet(int day_id) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         String hql = "SELECT * FROM Measurement WHERE day_id =:day_id";
         Query query = session.createSQLQuery(hql);
         query.setParameter("day_id", day_id);
@@ -104,9 +111,9 @@ public class SQL {
      */
     public int getDayId(LocalDate day, int city_id) {
         String hql = "SELECT id FROM Day WHERE day=:day AND city_id=:city_id";
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Query query = session.createSQLQuery(hql);
-        query.setParameter("day", day);
+        query.setParameter(DAY, day);
         query.setParameter("city_id", city_id);
 
         List<Object> result = query.getResultList();
@@ -118,16 +125,17 @@ public class SQL {
     /**
      * Checks if the date for a specified city is already set.
      *
-     * @param day the day
+     * @param day     the day
      * @param city_id city id
+     *
      * @return true if the date already exists in the database.
      */
     public boolean dayIsSet(LocalDate day, int city_id) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         String hql = "SELECT day FROM Day WHERE day=:day AND city_id=:city_id";
 
         Query query = session.createSQLQuery(hql);
-        query.setParameter("day", day);
+        query.setParameter(DAY, day);
         query.setParameter("city_id", city_id);
 
         List<Object> result = query.getResultList();
@@ -139,19 +147,19 @@ public class SQL {
     /**
      * Inserts measurements for a specified day.
      *
-     * @param measurements measurements
-     * @param dayId day id
+     * @param predictions a List of {@link Predictions}
+     * @param dayId        day id
      */
-    public void setDailyMeasurement(List<Measurement> measurements, int dayId) {
-        for(Measurement measurement: measurements) {
-            Session session = this.sessFactory.openSession();
+    public void setDailyMeasurement(List<Predictions> predictions, int dayId) {
+        for (Predictions prediction : predictions) {
+            Session session = sessionFactory().openSession();
             Transaction tx = session.beginTransaction();
             Query query = session.createSQLQuery(INSERT_INTO_MEASUREMENT);
-            query.setParameter("time", measurement.getEventTime());
-            query.setParameter("temperature", measurement.getTemperature());
-            query.setParameter("humidity", measurement.getHumidity());
-            query.setParameter("wind", measurement.getWind());
-            query.setParameter("phenomeno", measurement.getPhenomeno());
+            query.setParameter(TIME, prediction.getTime());
+            query.setParameter(TEMPERATURE, prediction.getTemperature());
+            query.setParameter(HUMIDITY, prediction.getHumidity());
+            query.setParameter(WIND, prediction.getWind());
+            query.setParameter(PHENOMENO, prediction.getPhenomeno());
             query.setParameter("day_id", dayId);
             query.executeUpdate();
 
@@ -163,13 +171,13 @@ public class SQL {
     /**
      * Checks if measurements are the same and updates id necessary.
      *
-     * @param day_id the day id
-     * @param measurements list of measurements
+     * @param day_id       the day id
+     * @param predictions a list of {@link Predictions}
      */
-    public void checkAndUpdateDailyMeasurement(int day_id, List<Measurement> measurements) {
-        Session session = this.sessFactory.openSession();
+    public void checkAndUpdateDailyMeasurement(int day_id, List<Predictions> predictions) {
+        Session session = sessionFactory().openSession();
         String sqlQuery = "SELECT * FROM " +
-                "(SELECT * FROM Measurement WHERE day_id = " + day_id + " ORDER BY id DESC LIMIT " +  measurements.size() + ") " +
+                "(SELECT * FROM Measurement WHERE day_id = " + day_id + " ORDER BY id DESC LIMIT " + predictions.size() + ") " +
                 "a ORDER BY id;";
 
         Query query = session.createSQLQuery(sqlQuery);
@@ -177,44 +185,44 @@ public class SQL {
         session.close();
 
         int i = 0;
-        for(Object[] data : result) {
-            if(data[2].equals(measurements.get(i).getTemperature())) {
+        for (Object[] data : result) {
+            if (data[2].equals(predictions.get(i).getTemperature())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_TEMPERATURE, measurements.get(i), data[0], "temperature");
+                updateMeasurement(UPDATE_TEMPERATURE, predictions.get(i), data[0], TEMPERATURE);
             }
 
-            if(data[3].equals(measurements.get(i).getHumidity())) {
+            if (data[3].equals(predictions.get(i).getHumidity())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_HUMIDITY, measurements.get(i), data[0], "humidity");
+                updateMeasurement(UPDATE_HUMIDITY, predictions.get(i), data[0], HUMIDITY);
             }
 
-            if(data[4].equals(measurements.get(i).getWind())) {
+            if (data[4].equals(predictions.get(i).getWind())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_WIND, measurements.get(i), data[0], "wind");
+                updateMeasurement(UPDATE_WIND, predictions.get(i), data[0], WIND);
             }
 
-            if(data[5].equals(measurements.get(i).getPhenomeno())) {
+            if (data[5].equals(predictions.get(i).getPhenomeno())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_PHENOMENO, measurements.get(i), data[0], "phenomeno");
+                updateMeasurement(UPDATE_PHENOMENO, predictions.get(i), data[0], PHENOMENO);
             }
             i++;
         }
 
 
-        if( i < 8){
-            for (int k = i; k <  measurements.size(); k++ ){
-                Session sess = this.sessFactory.openSession();
+        if (i < 8) {
+            for (int k = i; k < predictions.size(); k++) {
+                Session sess = sessionFactory().openSession();
                 Transaction tx = sess.beginTransaction();
                 Query ms = sess.createSQLQuery(INSERT_INTO_MEASUREMENT);
-                ms.setParameter("time", measurements.get(k).getEventTime());
-                ms.setParameter("temperature", measurements.get(k).getTemperature());
-                ms.setParameter("humidity", measurements.get(k).getHumidity());
-                ms.setParameter("wind", measurements.get(k).getWind());
-                ms.setParameter("phenomeno", measurements.get(k).getPhenomeno());
+                ms.setParameter(TIME, predictions.get(k).getTime());
+                ms.setParameter(TEMPERATURE, predictions.get(k).getTemperature());
+                ms.setParameter(HUMIDITY, predictions.get(k).getHumidity());
+                ms.setParameter(WIND, predictions.get(k).getWind());
+                ms.setParameter(PHENOMENO, predictions.get(k).getPhenomeno());
                 ms.setParameter("day_id", day_id);
                 ms.executeUpdate();
 
@@ -227,27 +235,19 @@ public class SQL {
     /**
      * Update any of the measurements specified in the parameter if they differ
      *
-     * @param hql the hql
-     * @param measurement measurement Object
-     * @param id id
-     * @param record record
+     * @param hql         the hql
+     * @param predictions the {@link Predictions}
+     * @param id          id the id
+     * @param record      the record
      */
-    private void updateMeasurement(String hql, Measurement measurement, Object id, String record) {
-        Session session = this.sessFactory.openSession();
-        Object val;
-        switch(record) {
-            case "temperature":
-                val = measurement.getTemperature();
-                break;
-            case "humidity":
-                val = measurement.getHumidity();
-                break;
-            case "wind":
-                val = measurement.getWind();
-                break;
-            default:
-                val = measurement.getPhenomeno();
-        }
+    private void updateMeasurement(String hql, Predictions predictions, Object id, String record) {
+        Session session = sessionFactory().openSession();
+        Object val = switch (record) {
+            case TEMPERATURE -> predictions.getTemperature();
+            case HUMIDITY -> predictions.getHumidity();
+            case WIND -> predictions.getWind();
+            default -> predictions.getPhenomeno();
+        };
 
         Transaction tx = session.beginTransaction();
         Query query = session.createSQLQuery(hql);
@@ -266,13 +266,13 @@ public class SQL {
      * @return true if a specified city is set
      */
     public boolean cityIsSet(String city) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Query query = session.createSQLQuery("SELECT city FROM City WHERE city=:city");
-        query.setParameter("city", city);
+        query.setParameter(CITY, city);
         List<Object> results = query.getResultList();
         session.close();
 
-        return !results.isEmpty() ? true : false;
+        return results.isEmpty() ? false : true;
     }
 
     /**
@@ -280,10 +280,10 @@ public class SQL {
      *
      * @param city_id city id used to query and delete previous measurements
      */
-     public void deleteMeasurementsByDayId(int city_id) {
-        Session session = this.sessFactory.openSession();
+    public void deleteMeasurementsByDayId(int city_id) {
+        Session session = sessionFactory().openSession();
         Transaction tx = null;
-        try{
+        try {
             tx = session.beginTransaction();
             String hql = "DELETE FROM Measurement WHERE day_id BETWEEN (SELECT id FROM Day WHERE city_id=:city_id AND day < current_date ORDER BY id ASC LIMIT 1)" +
                     " AND (SELECT id FROM Day WHERE city_id=:city_id AND day < current_date ORDER BY id DESC LIMIT 1)";
@@ -291,9 +291,9 @@ public class SQL {
             query.setParameter("city_id", city_id);
             query.executeUpdate();
             commitTransaction(tx);
-        }catch (Exception e) {
-            if(tx != null) tx.rollback();
-        }finally {
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+        } finally {
             session.close();
         }
     }
@@ -304,7 +304,7 @@ public class SQL {
      * @param city_id the city id for which days are deleted
      */
     public void deleteDays(int city_id) {
-        Session session = sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
@@ -314,7 +314,7 @@ public class SQL {
             query.executeUpdate();
             commitTransaction(tx);
         } catch (Exception e) {
-            if(tx != null) tx.rollback();
+            if (tx != null) tx.rollback();
         } finally {
             session.close();
         }
@@ -326,7 +326,7 @@ public class SQL {
      * @param city city name
      */
     public void saveCity(City city) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         session.save(city);
 
@@ -337,11 +337,11 @@ public class SQL {
     /**
      * Inserts new days and measurement into an existing City.
      *
-     * @param day the Day entity
-     * @param city the City entity
+     * @param day  the {@link Day}
+     * @param city the {@link City}
      */
     public void insertByCityId(Day day, City city) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
@@ -350,7 +350,7 @@ public class SQL {
             commitTransaction(tx);
         } catch (Exception e) {
             e.printStackTrace();
-            if(tx != null) tx.rollback();
+            if (tx != null) tx.rollback();
         } finally {
             session.close();
         }
@@ -360,19 +360,19 @@ public class SQL {
     /**
      * Gets a City entity by id.
      *
-     * @param city_id the city id.
-     * @return the City entity
+     * @param city_id the city id
+     * @return the {@link City}
      */
     public City getCityById(int city_id) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         City city = null;
-        try{
-            session = this.sessFactory.openSession();
+        try {
+            session = sessionFactory().openSession();
             city = session.load(City.class, city_id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(session != null && session.isOpen()) {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }
@@ -388,10 +388,10 @@ public class SQL {
      * @return result list
      */
     public List<Object[]> getCityDailyPredictions(String city, String date) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Query cityQuery = session.createSQLQuery(SELECT_CITY_PREDICTIONS_BY_DAY);
-        cityQuery.setParameter("city", city);
-        cityQuery.setParameter("day", date);
+        cityQuery.setParameter(CITY, city);
+        cityQuery.setParameter(DAY, date);
 
         List<Object[]> result = cityQuery.list();
         session.close();
@@ -408,11 +408,11 @@ public class SQL {
      * @return result list
      */
     public List<Object[]> getCityPredictionsPerHour(String city, String date, String time) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Query query = session.createSQLQuery(SELECT_CITY_PREDICTIONS_BY_TIME);
-        query.setParameter("city", city);
-        query.setParameter("day", date);
-        query.setParameter("time", time);
+        query.setParameter(CITY, city);
+        query.setParameter(DAY, date);
+        query.setParameter(TIME, time);
 
         List<Object[]> result = query.list();
         session.close();
@@ -427,11 +427,11 @@ public class SQL {
      * @return result list
      */
     public List<Object[]> getCityPredictions(String city) {
-        Session session = this.sessFactory.openSession();
+        Session session = sessionFactory().openSession();
         Query query = session.createSQLQuery(SELECT_CITY_PREDICTIONS);
-        query.setParameter("city", city);
+        query.setParameter(CITY, city);
 
-        List<Object[]> result = query.list();
+        List<Object[]> result = query.getResultList();
         session.close();
 
         return result;
@@ -443,7 +443,7 @@ public class SQL {
      * @param tx transaction object
      */
     private static void commitTransaction(Transaction tx) {
-        if(tx.getStatus().equals(TransactionStatus.ACTIVE)) {
+        if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
             tx.commit();
         }
     }

@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Model class representing the City table in the database
+ */
 @Entity(name = "City")
 @Table(name = "City", uniqueConstraints = {
         @UniqueConstraint(columnNames = "id")

@@ -29,17 +29,6 @@ N
         <div class="col-md-3 col-xs-12 logoclass"> <a href="index.cfm"><img alt="meteo.gr Ο ΚΑΙΡΟΣ ΣΤΗΝ ΕΛΛΑΔΑ" title="meteo.gr Ο ΚΑΙΡΟΣ ΣΤΗΝ ΕΛΛΑΔΑ" src="graphics/logos/Pandemic-final-logo2.svg?v=1.7" alt="" class=""/></a> </div>
         <div class="col-md-9 col-sm-12 hidden-xs ad728x90cf ">
         </div>
-        <div class=" center-block text-center visible-xs visible-sm " >
-            <ul class="footermenuSocialB center-block" style="padding-top: 10px;">
-                <li class=" socialtopB" ><a title="Επισκεφθείτε την σελίδα μας στο facebook" alt="Επισκεφθείτε την σελίδα μας στο facebook" class="socialtopB" target="_blank" href="https://www.facebook.com/Meteo.Gr"><i class="fa fa-2x fa-facebook" aria-hidden="true"></i>
-                </a>&nbsp;&nbsp;<a title="Επισκεφθείτε την σελίδα μας στο twitter" alt="Επισκεφθείτε την σελίδα μας στο twitter" class="socialtopB" target="_blank" href="https://twitter.com/meteogr"><i class="fa fa-2x fa-twitter" aria-hidden="true"></i>
-                </a></li>
-                <li class="socialtopB"><a title="Επισκεφθείτε την σελίδα μας στο Youtube" alt="Επισκεφθείτε την σελίδα μας στο Youtube" class="socialtopB" target="_blank" href="https://www.youtube.com/channel/UCtLRyc7qTR242G1ufaNquUw"><i class="fa fa-2x fa-youtube" aria-hidden="true"></i>
-                </a>&nbsp;<a title="Επισκεφθείτε την σελίδα μας στο Instagram" alt="Επισκεφθείτε την σελίδα μας στο Instagram" class="socialtopB" target="_blank" href="https://www.instagram.com/meteogr/"><i class="fa fa-2x fa-instagram" aria-hidden="true"></i>
-                </a>
-                </li>
-            </ul>
-        </div>
     </div>
 </div>
 <link rel="stylesheet" type="text/css" href="/js/navmenu/css/skins/navbar-blue-dark-summer.css">
@@ -3312,7 +3301,7 @@ N
                     K3 = Math.floor( Math.floor( ( YY / 100 ) + 49 ) * 0.75 ) - 38;
                     JD = K1 + K2 + D + 59; // for dates in Julian calendar
                     if( JD > 2299160 ) JD = JD - K3; // for Gregorian calendar
-// calculate moon's age in days
+// calculate moon's age in dayDTOS
                     IP = normalize( ( JD - 2451550.1 ) / 29.530588853 );
                     AG = IP*29.53;
                     if( AG < 1.84566 ) Phase = "Moonnew";
@@ -3367,278 +3356,12 @@ N
             <SCRIPT LANGUAGE="JavaScript">
                 initialize()
                 calculate();
-                <!--
-                    function getMoonAge(year, month, day)
-                    {
-                        d = Math.floor(year/20)
-                        r = year-(d*20) //r is the remainder of (year/19)
-                        while (r>9)
-                        {
-                            r = r-19
-                        }
-                        r = r*11
-                        while (r>29)
-                        {
-                            r = r-30
-                        }
-                        if (month<3)
-                        {
-                            month = month+2
-                        }
-                        r = r+month+day
-                        if (year<100)
-                        {
-                            r = r-4
-                        }
-                        else
-                        {
-                            r = r-8.3 //changed from 8.3
-                        }
-                        while(r>29)
-                        {
-                            r = r-30
-                        }
-                        while(r<0)
-                        {
-                            r = r+30
-                        }
-                        return r
-                    }
-                function getMoonPhase(moonAge)
-                {
-                    if (moonAge<2) return "νέας σελήνης"
-                    if (moonAge<5) return "νέου μηνίσκου"
-                    if (moonAge<11) return "πρώτου τέταρτου"
-                    if (moonAge<13) return "νέου αμφίκυρτου"
-                    if (moonAge==15) return "Πανσέληνος"
-                    if (moonAge<20) return "παλιού αμφίκυρτου"
-                    if (moonAge<24) return "τελευταίου τετάρτου"
-                    if (moonAge<29) return "παλιού μηνίσκου"
-                    if (moonAge<30) return "νέας σελήνης"
-                }
-                function getMoonPhaseImg(moonAge)
-                {
-                    if (moonAge<2) return "Moonnew"
-                    if (moonAge<5) return "Waningcr"
-                    if (moonAge<11) return "Firstqua"
-                    if (moonAge<13) return "Waninggi"
-                    if (moonAge<16) return "Moonfull"
-                    if (moonAge<20) return "Waxinggi"
-                    if (moonAge<24) return "Lastquar"
-                    if (moonAge<29) return "Waxingcr"
-                    if (moonAge<30) return "Moonnew"
-                }
-                monthNames = new Array(13)
-                monthNames[1] = "Ιανουαρίου"
-                monthNames[2] = "Φεβρουαρίου"
-                monthNames[3] = "Μαρτίου"
-                monthNames[4] = "Απριλίου"
-                monthNames[5] = "Μαίου"
-                monthNames[6] = "Ιουνίου"
-                monthNames[7] = "Ιουλίου"
-                monthNames[8] = "Αυγούστου"
-                monthNames[9] = "Σεπτεμβρίου"
-                monthNames[10] = "Οκτωβρίου"
-                monthNames[11] = "Νοεμβρίου"
-                monthNames[12] = "Δεκεμβρίου"
-                dayNames = new Array(8)
-                dayNames[1] = "Κυριακή"
-                dayNames[2] = "Δευτέρα"
-                dayNames[3] = "Τρίτη"
-                dayNames[4] = "Τεταρτη"
-                dayNames[5] = "Πέμπτη"
-                dayNames[6] = "Παρασκευή"
-                dayNames[7] = "Σάββατο"
-                function getLongDate(dateObj)
-                {
-                    theDay = dayNames[dateObj.getDay()+1]
-                    theMonth = monthNames[dateObj.getMonth()+1]
-                    theDate = dateObj.getDate()
-                    if (theYear < 1900 )
-                        theYear = 1900 + dateObj.getYear()
-//theYear = dateObj.getYear()
-                    return ""+theDay+", "+theDate+" "+theMonth+ " "+theYear
-                }
-                function getNextFull(moonAge)
-                {
-                    currMilSecs = (new Date()).getTime()
-                    daysToGo = 15 - moonAge
-                    while(daysToGo<2)
-                    {
-                        daysToGo = daysToGo+29
-                    }
-                    milSecsToGo = daysToGo*24*60*60*1000
-                    nextMoonTime = currMilSecs+milSecsToGo
-                    nextMoonDate = new Date(nextMoonTime)
-                    return nextMoonDate
-                }
-                function getNextNew(moonAge)
-                {
-                    currMilSecs = (new Date()).getTime()
-                    daysToGo = 29 - moonAge
-                    while(daysToGo<2)
-                    {
-                        daysToGo = daysToGo+29
-                    }
-                    milSecsToGo = daysToGo*24*60*60*1000
-                    nextMoonTime = currMilSecs+milSecsToGo
-                    nextMoonDate = new Date(nextMoonTime)
-                    return nextMoonDate
-                }
-                //-->
             </SCRIPT>
             <style>
                 .moonimage {
                 }
             </style>
             <div class="moonBox text-left">
-                <SCRIPT LANGUAGE="JavaScript">
-                    <!--
-                    var today = new Date(2020,
-                        3, 12, 0, 4,
-                        31);
-                    theDate = today
-                    theYear = theDate.getYear()
-                    theMonth = theDate.getMonth()+1
-                    theDay = theDate.getDate()
-                    theMoonAge = getMoonAge(theYear, theMonth, theDay)
-                    theMoonPhase1 = getMoonPhase(theMoonAge)
-                    /*html +=" Η Σελήνη βρίσκεται σε φαση " +theMoonPhase+"")*/
-                    theMoonPhase = getMoonPhaseImg(theMoonAge)
-                    var html = "<div class='moonimage'>";
-                    html += "<a href='/moontime.cfm' title='Πατήστε εδώ για να δείτε την ανατολή-δύση της Σελήνης' alt='Πατήστε εδώ για να δείτε την ανατολή-δύση της Σελήνης'><img width='98px' src='graphics/images/moon/"+ escape(Phase)+".svg?v=1.3' ALIGN='right'></a>";
-                    html += "</div>";
-                    var moonBox = document.querySelector('.moonBox');
-                    moonBox.innerHTML = html;
-                    var shortMoonAge = Math.round(theMoonAge)
-                    //html +="Lion "+ shortMoonAge)
-                    var today = new Date(2020,
-                        3, 12, 0, 4,
-                        31);
-                    var simera=today;
-                    var TZ=simera.getTimezoneOffset();
-                    var Year=getFullYear(simera);
-                    var Month=simera.getMonth()+1;
-                    var Day=simera.getDate();
-                    var JDE=MoonQuarters(Year,Month,Day);
-                    var JDEc;
-                    JDEc=jdtocd(JDE[2]);
-                    var d = new Date(JDEc[0],JDEc[1]-1,JDEc[2]);
-                    if ((d.getFullYear()==simera.getFullYear())&& (d.getMonth()==simera.getMonth()) && (d.getDate()==simera.getDate()))
-                    {html +=" <h4 class='subTitle2'>";
-                        html +="ΣΗΜΕΡΑ ΠΑΝΣΕΛΗΝΟΣ ";
-                        html +="<div class='moontext3'> "	;
-                        html +="<img height='30px' src='graphics/images/moon/"+ escape(Phase)+"-hr.svg?v=1.4'>";
-                        html +=" </div>"
-                        var moonBox = document.querySelector('.moonBox');
-                        moonBox.innerHTML = html;
-                    }else
-                    {
-                        html +=" <h4 class='subTitle2'>";
-                        html +="Σελήνη: "+round2( AG );
-                        if (round2( AG )==1)
-                        {
-                            html +=" ημέρας";
-                        }
-                        else
-                        {
-                            html +=" ημερών";
-                        }
-                        html +="<div class='moontext3'> ";
-                        html +="<img height='30px' src='graphics/images/moon/"+ escape(Phase)+"-hr.svg?v=1.4'>";
-                        html +=" </div>";
-                    }
-                    var d_names = new Array("Κυριακή", "Δευτέρα", "Τρίτη",
-                        "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο");
-                    var m_names = new Array("Ιανουαρίου", "Φεβρουαρίου", "Μαρτίου",
-                        "Απριλίου", "Μαίου", "Ιουνίου", "Ιουλίου", "Αυγούστου", "Σεπτεμβρίου",
-                        "Οκτωβρίου", "Νοεμβρίου", "Δεκεμβρίου");
-                    if (Month<13)
-                    {
-                        if ((d.getFullYear()==simera.getFullYear())&& (simera.getMonth()<=d.getMonth()) && (simera.getDate()<d.getDate()))
-                        {
-                            var curr_dayofweek = d.getDay();
-                            var curr_date = d.getDate();
-                            var curr_month = d.getMonth();
-                            var curr_year = d.getFullYear();
-                            html +="</h4><div class='moontext3' > ";
-                            html +="Επόμενη Πανσέληνος:<br/> ";
-                            html +=" </div>";
-                            html +="<div class='moontext3'> ";
-                            html +=d_names[curr_dayofweek]+", "+curr_date + " " + m_names[curr_month] + " " + curr_year+"";
-                            html +=" </div>";
-                            var moonBox = document.querySelector('.moonBox');
-                            moonBox.innerHTML = html;
-                        }
-                        else
-                        {
-                            var Year=getFullYear(simera);
-                            var Month=simera.getMonth()+1;
-                            var Day=simera.getDate()+10;
-                            JDE=MoonQuarters(Year,Month,Day);
-                            JDEc;
-                            JDEc=jdtocd(JDE[2]);
-                            d = new Date(JDEc[0],JDEc[1]-1,JDEc[2]);
-                            curr_dayofweek = d.getDay();
-                            curr_date = d.getDate();
-                            curr_month = d.getMonth();
-                            curr_year = d.getFullYear();
-                            html +="</h4><div class='moontext3' > ";
-                            html +="Επόμενη Πανσέληνος:<br/> ";
-                            html +=" </div>";
-                            html +="<div class='moontext3'> ";
-                            html +=d_names[curr_dayofweek]+", "+curr_date + " " + m_names[curr_month]
-                                + " " + curr_year+"";
-                            html +=" </div>";
-                            var moonBox = document.querySelector('.moonBox');
-                            moonBox.innerHTML = html;
-                        }
-                    } else{
-                        simera=today;
-                        TZ=simera.getTimezoneOffset();
-                        Year=getFullYear(simera);
-                        Month=simera.getMonth()+1;
-                        Day=simera.getDate();
-                        JDE=MoonQuarters(Year,Month,Day);
-                        JDEc;
-                        JDEc=jdtocd(JDE[2]);
-                        d = new Date(JDEc[0],JDEc[1]-1,JDEc[2]);
-                        var curr_dayofweek = d.getDay();
-                        var curr_date = d.getDate();
-                        var curr_month = d.getMonth();
-                        var curr_year = d.getFullYear();
-                        if (Day<d.getDate()){
-                            html +="</h4><div class='moontext3'> ";
-                            html +="Επόμενη Πανσέληνος:<br/> ";
-                            html +=" </div>";
-                            html +="<div class='moontext3'> ";
-                            html +=d_names[curr_dayofweek]+", "+curr_date + " " + m_names[curr_month]
-                                + " " + curr_year+"";
-                            html +=" </div>";
-                            var moonBox = document.querySelector('.moonBox');
-                            moonBox.innerHTML = html;
-                        }else {
-                            Month=simera.getMonth()+2;
-                            JDE=MoonQuarters(Year,Month,Day);
-                            JDEc;
-                            JDEc=jdtocd(JDE[2]);
-                            d = new Date(JDEc[0],JDEc[1]-1,JDEc[2]);
-                            var curr_dayofweek = d.getDay();
-                            var curr_date = d.getDate();
-                            var curr_month = d.getMonth();
-                            var curr_year = d.getFullYear();
-                            html +="</h4><div class='moontext3' > ";
-                            html +="Επόμενη Πανσέληνος:<br/> ";
-                            html +=" </div>";
-                            html +="<div class='moontext3'> ";
-                            html +=d_names[curr_dayofweek]+", "+curr_date + " " + m_names[curr_month] + " " + curr_year+"";
-                            html +=" </div>";
-                            var moonBox = document.querySelector('.moonBox');
-                            moonBox.innerHTML = html;
-                        }
-//-->
-                    }
-                </SCRIPT>
             </div>
             <!-- Strossle SDK 2-2-2020 test atr 2/2 -->
             <div class="strossle-widget" style="margin-left:20px; margin-right:15px"></div>
@@ -3694,19 +3417,6 @@ N
                     </div>
                     <div class="col-md-4 col-lg-4 hidden-sm hidden-xs">
                     </div>
-                    <div class="col-xs-12 col-sm-12 margin04">
-                        <div class=" pull-left " >
-                            <ul class="footermenuSocialB " style=" color: #fff; margin-left: -40px;">
-                                <li class=" socialtopB" style="color:#fff"><a title="Επισκεφθείτε την σελίδα μας στο facebook" alt="Επισκεφθείτε την σελίδα μας στο facebook" class="socialtopB" style="color: #fff;" target="_blank" href="https://www.facebook.com/Meteo.Gr"><i class="fa fa-2x fa-facebook" aria-hidden="true"></i>
-                                </a>&nbsp;&nbsp;<a title="Επισκεφθείτε την σελίδα μας στο twitter" alt="Επισκεφθείτε την σελίδα μας στο twitter" class="socialtopB" target="_blank" style="color: #fff;" href="https://twitter.com/meteogr"><i class="fa fa-2x fa-twitter" aria-hidden="true"></i>
-                                </a>
-                                    <a title="Επισκεφθείτε την σελίδα μας στο Youtube" alt="Επισκεφθείτε την σελίδα μας στο Youtube" class="socialtopB" target="_blank" style="color: #fff;" href="https://www.youtube.com/channel/UCtLRyc7qTR242G1ufaNquUw"><i class="fa fa-2x fa-youtube" aria-hidden="true"></i>
-                                    </a>&nbsp;<a title="Επισκεφθείτε την σελίδα μας στο Instagram" alt="Επισκεφθείτε την σελίδα μας στο Instagram" class="socialtopB" target="_blank" style="color: #fff;" href="https://www.instagram.com/meteogr/"><i class="fa fa-2x fa-instagram" aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -3719,48 +3429,5 @@ N
         </div>
     </div>
 </div>
-<script data-ws="22892" data-h="phaistos-ssp.adman.gr" data-s="1x1" src="//static.adman.gr/adman.js"></script>
-<style>
-    #alertBox2 {
-        z-index: 1001;
-        position: absolute;
-        display: none;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        top: 35%;
-        width: 80%;
-        max-width: 400px;
-        text-align: justify;
-        height: auto;
-        padding: 6px;
-        -webkit-box-shadow: 0px 5px 15px #333;
-        -moz-box-shadow: 0px 5px 15px #333;
-        box-shadow: 0px 5px 15px #333;
-    }
-</style>
-<script>
-    function showAlert2(textToshow, timeToShow) {
-        $("#alertBox2").fadeIn(1000, function () {
-        });
-        setTimeout(function () {
-            hideAlert2();
-        }, timeToShow);
-    }
-    function hideAlert2() {
-        $("#alertBox2").fadeOut(700);
-    }
-</script>
-<script>
-    $(document).ready(function () {
-        showAlert2("", 10000);
-    });
-</script>
-<div class="alert alert-danger" id="alertBox2">
-    <div class="mantzaris2" width="" style="text-align: right"><a href="#" onClick="hideAlert2()"><img src="graphics/designelements/close_X.png" width="28" height="28" alt="" id="close"/></a></div>
-    <div class="text-center " ><a href="https://eody.gov.gr/neos-koronaios-covid-19/" target="_blank"><img src="/graphics/banner.jpg" width="100%" class="img-responsive" alt="Οδηγίες προστασίας από αναπνευστική λοίμωξη από το νέο κοροναϊό"/></a></div>
-</div>
-<script language=JavaScript src=/absolutebmxe/abmTest.asp?z=54></script>
 </body>
 </html>

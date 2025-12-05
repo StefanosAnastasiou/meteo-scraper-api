@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.emperium.scraper.CityScraper;
+
+/**
+ * Class that maps the city names to an index number. The index number is used
+ * in {@link CityScraper#SERVICE_URL}. According to this index, the URL for each city to be scraped is formed
+ */
 public class Mappings {
 
     public static Map<Integer, String> cityMappings = new HashMap<>();
@@ -509,18 +515,18 @@ public class Mappings {
     }
 
     static {
-        monthMappings.put("ΙΑΝΟΥΑΡΙΟΥ", "01");
+        monthMappings.put("ΙΑΝΟΥΑΡΙΟΥ",  "01");
         monthMappings.put("ΦΕΒΡΟΥΑΡΙΟΥ", "02");
-        monthMappings.put("ΜΑΡΤΙΟΥ", "03");
-        monthMappings.put("ΑΠΡΙΛΙΟΥ", "04");
-        monthMappings.put("ΜΑΪΟΥ", "05");
-        monthMappings.put("ΙΟΥΝΙΟΥ", "06");
-        monthMappings.put("ΙΟΥΛΙΟΥ", "07");
-        monthMappings.put("ΑΥΓΟΥΣΤΟΥ", "08");
+        monthMappings.put("ΜΑΡΤΙΟΥ",     "03");
+        monthMappings.put("ΑΠΡΙΛΙΟΥ",    "04");
+        monthMappings.put("ΜΑΪΟΥ",       "05");
+        monthMappings.put("ΙΟΥΝΙΟΥ",     "06");
+        monthMappings.put("ΙΟΥΛΙΟΥ",     "07");
+        monthMappings.put("ΑΥΓΟΥΣΤΟΥ",   "08");
         monthMappings.put("ΣΕΠΤΕΜΒΡΙΟΥ", "09");
-        monthMappings.put("ΟΚΤΩΒΡΙΟΥ", "10");
-        monthMappings.put("ΝΟΕΜΒΡΙΟΥ", "11");
-        monthMappings.put("ΔΕΚΕΜΒΡΙΟΥ", "12");
+        monthMappings.put("ΟΚΤΩΒΡΙΟΥ",   "10");
+        monthMappings.put("ΝΟΕΜΒΡΙΟΥ",   "11");
+        monthMappings.put("ΔΕΚΕΜΒΡΙΟΥ",  "12");
     }
 
     static {

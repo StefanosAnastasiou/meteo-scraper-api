@@ -10,7 +10,6 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * Wrapper class for Quartz Scheduler
- *
  */
 public class ScrapeScheduler {
 
@@ -45,7 +44,7 @@ public class ScrapeScheduler {
     public ScrapeScheduler createTrigger() {
         trigger = newTrigger()
                 .withIdentity("CronTrigger")
-//    Uncomment these line for testing and comment the cron bellow.
+//    Uncomment these line for testing and comment the cron bellow so it can start immediately
 //                .startNow()
 //                .withSchedule(simpleSchedule()
 //                              .withIntervalInSeconds(480)
