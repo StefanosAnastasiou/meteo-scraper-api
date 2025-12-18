@@ -11,26 +11,24 @@ services:
 #    depends_on:
 #      - meteo
   database:
-    image: mysql:8.4.0
+    image: postgres
     restart: on-failure
     container_name: database-meteo
     volumes:
-      - ./sql-init:/docker-entrypoint-initdb.d
-      - /home/weather-data-meteo/:/var/lib/mysql
+      - /home/weather-data-meteo/:/data/postgres
     environment:
-      MYSQL_DATABASE: 'weatherDB'
-      MYSQL_ROOT_PASSWORD: 'password'
-      MYSQL_PASSWORD: 'password'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'weatherDB'
     ports:
-      - "3307:3306" # 3307 exposed in host machine
-    command: ['mysqld']
-
+      - "5332:5432"
   meteo:
     image: meteo-scraper-api:latest
     container_name: meteo
     environment:
       DATABASE_USERNAME: 'root'
       DATABASE_PASSWORD: 'password'
+      DATABASE_URL: 'jdbc:postgresql://database-meteo:5332/weatherDB?createDatabaseIfNotExist=true'
     ports:
       - 8445:8445
     depends_on:

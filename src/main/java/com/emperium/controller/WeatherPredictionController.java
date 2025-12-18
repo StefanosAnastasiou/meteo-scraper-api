@@ -1,5 +1,6 @@
 package com.emperium.controller;
 
+import com.emperium.errors.ErrorMessage;
 import com.emperium.service.WeatherPredictionsService;
 import com.emperium.service.WeatherPredictionsServiceImpl;
 import com.emperium.dto.predictions.CityPredictionsDTO;
@@ -7,13 +8,13 @@ import com.emperium.dto.predictions.PredictionsDTO;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 /**
  * Controller class that fetches weather predictions per city
+ * @author Stefanos Anastasiou
  */
 @Path("predictions")
 public class WeatherPredictionController {
@@ -28,18 +29,19 @@ public class WeatherPredictionController {
      */
     @GET
     @Path("/{city}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response cityPredictions(@PathParam("city") String city) {
         logger.info("Fetching predictions for " + city);
         CityPredictionsDTO result = predictionsService.getCityPredictions(city);
 
-//        if (result == null) return Response.status(Response.Status.NOT_FOUND).build();
-
-        return Response
-                .status(Response.Status.OK.getStatusCode())
+        if (result.getCity() == null || result.getData() == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("Not found"))
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+        return Response.ok(result, MediaType.APPLICATION_JSON)
                 .entity(result)
                 .build();
-
     }
 
     /**
@@ -51,13 +53,17 @@ public class WeatherPredictionController {
      */
     @GET
     @Path("/{city}/{day}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response cityDailyPrediction(@PathParam("city") String city, @PathParam("day") String date) {
         logger.info("Fetching daily predictions for  " + city );
         CityPredictionsDTO result = predictionsService.getCityDailyPredictions(city, date);
+        if (result.getCity() == null || result.getData() == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("Not found"))
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
 
-        return Response
-                .status(Response.Status.OK.getStatusCode())
+        return Response.ok(result, MediaType.APPLICATION_JSON)
                 .entity(result)
                 .build();
     }
@@ -68,17 +74,22 @@ public class WeatherPredictionController {
      * @param city the requested city
      * @param day the requested day
      * @param time the requested time of the days
-     * @return {@link Response}
+     * @return the {@link Response}
      */
     @GET
     @Path("{city}/{day}/{time}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response cityHourPrediction(@PathParam("city") String city, @PathParam("day") String day, @PathParam("time") String time) {
         logger.info("Fetching predictions for " + city + " on: " + day + " at: " + time);
         PredictionsDTO result = predictionsService.getCityPredictionsPerHour(city, day, time);
 
-        return Response
-                .status(Response.Status.OK.getStatusCode())
+        if(result == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("Not found"))
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+
+        return Response.ok(result, MediaType.APPLICATION_JSON)
                 .entity(result)
                 .build();
     }

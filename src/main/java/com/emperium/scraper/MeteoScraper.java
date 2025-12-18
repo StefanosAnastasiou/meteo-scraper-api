@@ -16,6 +16,11 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
+/**
+ * Class responsible for taking all values scraped and adds them to database accordingly
+ *
+ * @author Stefanos Anastasiou
+ */
 public class MeteoScraper implements Job {
 
     private Logger logger = Logger.getLogger(MeteoScraper.class);
@@ -111,7 +116,7 @@ public class MeteoScraper implements Job {
                     .forEach(job -> {
                         if (job.getJobDetail().getKey().getName().equals(ScrapeScheduler.SCRAPE_CITY_JOB)) {
                             try {
-                                initiate();
+//                                initiate();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

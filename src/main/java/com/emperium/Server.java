@@ -1,7 +1,9 @@
 package com.emperium;
 
+import com.emperium.config.LiquibaseRunner;
 import com.emperium.luceneindex.Indexer;
 import com.emperium.scraper.MeteoScraper;
+import liquibase.exception.LiquibaseException;
 import org.apache.log4j.Logger;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -12,6 +14,9 @@ import org.quartz.SchedulerException;
 import java.io.IOException;
 import java.net.URI;
 
+/**
+ * @author Stefanos Anastasiou
+ */
 public class Server {
 
     private static final Logger logger = Logger.getLogger(Server.class);
@@ -26,14 +31,15 @@ public class Server {
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
-    public static void main(String[] args) throws IOException, ParseException, SchedulerException {
+    public static void main(String[] args) throws IOException, ParseException, SchedulerException, InterruptedException, LiquibaseException {
         // Delay application start up so that database container starts first. FIXME: move this solution to docker / docker compose
-//        Thread.sleep(30*1000);
+        Thread.sleep(5*1000);
         final HttpServer server = startServer();
         server.start();
         logger.info("Http server started...");
 
         indexer.createOrUpdateIndex();
+        LiquibaseRunner.run();
 
         meteoScraper.init();
     }

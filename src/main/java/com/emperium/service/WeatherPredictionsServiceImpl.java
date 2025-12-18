@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Service class for fetching weather predictions
+ * @author Stefanos Anastasiou
  */
 public class WeatherPredictionsServiceImpl implements WeatherPredictionsService {
 
@@ -38,15 +39,14 @@ public class WeatherPredictionsServiceImpl implements WeatherPredictionsService 
          */
         String predictionCity = (String) result.get(0)[0];
 
-        CityPredictionsDTO cityPredictionsDTO = new CityPredictionsDTO.Builder()
-                .setCity(predictionCity)
-                .setDate(datePredictionsDTOS)
+        CityPredictionsDTO cityPredictionsDTO = CityPredictionsDTO.builder()
+                .city(predictionCity)
+                .data(datePredictionsDTOS)
                 .build();
 
         if (!result.isEmpty()) return cityPredictionsDTO;
 
-        return new CityPredictionsDTO.Builder().build();
-
+        return CityPredictionsDTO.builder().build();
     }
 
     /**
@@ -66,9 +66,9 @@ public class WeatherPredictionsServiceImpl implements WeatherPredictionsService 
          */
         String predictionCity = (String) result.get(0)[0];
 
-        CityPredictionsDTO cityPredictionsDTO = new CityPredictionsDTO.Builder()
-                .setCity(predictionCity)
-                .setDate(datePredictionsDTOS)
+        CityPredictionsDTO cityPredictionsDTO = CityPredictionsDTO.builder()
+                .city(predictionCity)
+                .data(datePredictionsDTOS)
                 .build();
 
         if (!result.isEmpty()) return cityPredictionsDTO;
@@ -89,12 +89,12 @@ public class WeatherPredictionsServiceImpl implements WeatherPredictionsService 
         List<Object[]> result = weatherPredictionsDAO.getCityPredictionsPerHour(city, date, time);
 
         return result.stream()
-                .map(obj -> new PredictionsDTO.Builder()
-                        .setTime(((Time) obj[2]).toLocalTime())
-                        .setTemperature((Integer) obj[3])
-                        .setHumidity((Integer) obj[5])
-                        .setWind((String) obj[4])
-                        .setPhenomenon((String) obj[6])
+                .map(obj -> PredictionsDTO.builder()
+                        .time(((Time) obj[2]).toLocalTime())
+                        .temperature((Integer) obj[3])
+                        .humidity((Integer) obj[5])
+                        .wind((String) obj[4])
+                        .phenomeno((String) obj[6])
                         .build()
                 )
                 .findFirst()

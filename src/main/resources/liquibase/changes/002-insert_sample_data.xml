@@ -1,0 +1,494 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1745489321748-1" author="Stefanos Anastasiou">
+        <insert tableName="city">
+            <column name="id" value="1"/>
+            <column name="city" value="ΘΕΣΣΑΛΟΝΙΚΗ"/>
+        </insert>
+
+        <insert tableName="day">
+            <column name="id" value="1"/>
+            <column name="day" valueComputed="NOW()"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="day">
+            <column name="id" value="2"/>
+            <column name="day" valueComputed="NOW() + INTERVAL '1 day'"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="day">
+            <column name="id" value="3"/>
+            <column name="day" valueComputed="NOW() + INTERVAL '2 day'"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="day">
+            <column name="id" value="4"/>
+            <column name="day" valueComputed="NOW() + INTERVAL '3 day'"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="day">
+            <column name="id" value="5"/>
+            <column name="day" valueComputed="NOW() + INTERVAL '4 day'"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="day">
+            <column name="id" value="6"/>
+            <column name="day" valueComputed="NOW() + INTERVAL '5 day'"/>
+            <column name="city_id" value="1"/>
+        </insert>
+        <insert tableName="day">
+            <column name="id" value="7"/>
+            <column name="day" valueComputed="NOW() + INTERVAL '6 day'"/>
+            <column name="city_id" value="1"/>
+        </insert>
+
+
+        <!-- predictions -->
+        <!-- day 1-->
+        <insert tableName="predictions">
+            <column name="id" value="1"/>
+            <column name="time" value="02:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="83"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="2"/>
+            <column name="time" value="05:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="86"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="3"/>
+            <column name="time" value="08:00"/>
+            <column name="temperature" value="10"/>
+            <column name="humidity" value="85"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="4"/>
+            <column name="time" value="11:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="67"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="5"/>
+            <column name="time" value="14:00"/>
+            <column name="temperature" value="12"/>
+            <column name="humidity" value="50"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="6"/>
+            <column name="time" value="17:00"/>
+            <column name="temperature" value="1"/>
+            <column name="humidity" value="62"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="7"/>
+            <column name="time" value="20:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="68"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="8"/>
+            <column name="time" value="23:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="69"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+
+        <!-- day 2 -->
+        <insert tableName="predictions">
+            <column name="id" value="9"/>
+            <column name="time" value="02:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="83"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="10"/>
+            <column name="time" value="05:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="86"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="11"/>
+            <column name="time" value="08:00"/>
+            <column name="temperature" value="10"/>
+            <column name="humidity" value="85"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="1"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="12"/>
+            <column name="time" value="11:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="67"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="13"/>
+            <column name="time" value="14:00"/>
+            <column name="temperature" value="12"/>
+            <column name="humidity" value="50"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="14"/>
+            <column name="time" value="17:00"/>
+            <column name="temperature" value="1"/>
+            <column name="humidity" value="62"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="15"/>
+            <column name="time" value="20:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="68"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="16"/>
+            <column name="time" value="23:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="69"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="2"/>
+        </insert>
+
+        <!-- day 3 -->
+        <insert tableName="predictions">
+            <column name="id" value="17"/>
+            <column name="time" value="02:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="83"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="18"/>
+            <column name="time" value="05:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="86"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="19"/>
+            <column name="time" value="08:00"/>
+            <column name="temperature" value="10"/>
+            <column name="humidity" value="85"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="20"/>
+            <column name="time" value="11:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="67"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="21"/>
+            <column name="time" value="14:00"/>
+            <column name="temperature" value="12"/>
+            <column name="humidity" value="50"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="22"/>
+            <column name="time" value="17:00"/>
+            <column name="temperature" value="1"/>
+            <column name="humidity" value="62"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="23"/>
+            <column name="time" value="20:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="68"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="24"/>
+            <column name="time" value="23:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="69"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="3"/>
+        </insert>
+
+        <!-- day 4-->
+        <insert tableName="predictions">
+            <column name="id" value="25"/>
+            <column name="time" value="02:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="83"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="26"/>
+            <column name="time" value="05:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="86"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="27"/>
+            <column name="time" value="08:00"/>
+            <column name="temperature" value="10"/>
+            <column name="humidity" value="85"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="28"/>
+            <column name="time" value="11:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="67"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="29"/>
+            <column name="time" value="14:00"/>
+            <column name="temperature" value="12"/>
+            <column name="humidity" value="50"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="30"/>
+            <column name="time" value="17:00"/>
+            <column name="temperature" value="1"/>
+            <column name="humidity" value="62"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="31"/>
+            <column name="time" value="20:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="68"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="32"/>
+            <column name="time" value="23:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="69"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+
+        <!-- day 5 -->
+        <insert tableName="predictions">
+            <column name="id" value="33"/>
+            <column name="time" value="02:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="83"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="34"/>
+            <column name="time" value="05:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="86"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="35"/>
+            <column name="time" value="08:00"/>
+            <column name="temperature" value="10"/>
+            <column name="humidity" value="85"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="36"/>
+            <column name="time" value="11:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="67"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="37"/>
+            <column name="time" value="14:00"/>
+            <column name="temperature" value="12"/>
+            <column name="humidity" value="50"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="38"/>
+            <column name="time" value="17:00"/>
+            <column name="temperature" value="1"/>
+            <column name="humidity" value="62"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="39"/>
+            <column name="time" value="20:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="68"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="40"/>
+            <column name="time" value="23:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="69"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+
+        <!-- day 6 -->
+        <insert tableName="predictions">
+            <column name="id" value="41"/>
+            <column name="time" value="02:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="83"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="42"/>
+            <column name="time" value="05:00"/>
+            <column name="temperature" value="11"/>
+            <column name="humidity" value="86"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="43"/>
+            <column name="time" value="08:00"/>
+            <column name="temperature" value="10"/>
+            <column name="humidity" value="85"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="44"/>
+            <column name="time" value="11:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="67"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="45"/>
+            <column name="time" value="14:00"/>
+            <column name="temperature" value="12"/>
+            <column name="humidity" value="50"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="46"/>
+            <column name="time" value="17:00"/>
+            <column name="temperature" value="1"/>
+            <column name="humidity" value="62"/>
+            <column name="wind" value="2 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="47"/>
+            <column name="time" value="20:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="68"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+        <insert tableName="predictions">
+            <column name="id" value="48"/>
+            <column name="time" value="23:00"/>
+            <column name="temperature" value="14"/>
+            <column name="humidity" value="69"/>
+            <column name="wind" value="3 Μπφ ΒΔ"/>
+            <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
+            <column name="day_id" value="4"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

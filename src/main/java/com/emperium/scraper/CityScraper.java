@@ -24,6 +24,8 @@ import java.util.stream.IntStream;
  * Class that holds all scraping logic.
  * It is responsible for scraping elements from {@link <a href="https://www.meteo.gr/">Meteo</a>}
  * and sets the {@link City} model accordingly.
+ *
+ * @author Steafanos Anastasiou
  */
 public class CityScraper {
 
@@ -69,7 +71,7 @@ public class CityScraper {
 
             List<String> datesList = daysToList(datesEvent);
             List<String> monthsList = monthsToList(months);
-            List<LocalDate> holidaysList = holidaysToList(holidayEventDate);
+//            List<LocalDate> holidaysList = holidaysToList(holidayEventDate);
             List<LocalDate> dates = zipDaymonthToLocaDate(datesList, monthsList);
 
             List<LocalTime> timeList = timeToList(eventTime);
@@ -166,9 +168,8 @@ public class CityScraper {
                     try {
                         return stringToLocalDate(d.replace("/", "-"));
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
-                    return LocalDate.now();  //  FIXME:
                 })
                 .toList();
     }

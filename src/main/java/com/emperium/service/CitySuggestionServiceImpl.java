@@ -41,10 +41,11 @@ public class CitySuggestionServiceImpl implements CitySuggestionService {
 
         for (ScoreDoc sd : topDocs.scoreDocs) {
             Document d = indexSearcher.doc(sd.doc);
-            suggestions.add(new CitySuggestionDTO.Builder()
-                    .setCity(String.format(d.get("city")))
-                    .setId(String.format(d.get("id")))
-                    .build()
+            suggestions.add(
+                    CitySuggestionDTO.builder()
+                            .city(String.format(d.get("city")))
+                            .id(String.format(d.get("id")))
+                            .build()
             );
         }
         return suggestions;

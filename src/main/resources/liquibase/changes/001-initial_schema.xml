@@ -1,0 +1,50 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1744635228064-1" author="Stefanos Anastasiou">
+        <createTable tableName="city">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="city" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="day">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="day" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_day_dity" references="city(id)"/>
+            </column>
+        </createTable>
+        <createTable tableName="predictions">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="time" type="time">
+                <constraints nullable="false"/>
+            </column>
+            <column name="temperature" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="humidity" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wind" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phenomeno" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="day_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_predictions_day" references="day(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

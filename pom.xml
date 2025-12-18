@@ -5,7 +5,7 @@
     <groupId>com.emperium</groupId>
     <artifactId>meteo-scraper-api</artifactId>
     <packaging>jar</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -27,6 +27,16 @@
             <version>8.0.33</version>
         </dependency>
         <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.27.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.8</version>
+        </dependency>
+        <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
             <version>2.56.0</version>
@@ -41,11 +51,16 @@
             <artifactId>hibernate-c3p0</artifactId>
             <version>5.4.8.Final</version>
         </dependency>
-        <!-- REDIS -->
+        <!-- REDIS comming up -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>5.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -126,6 +141,7 @@
                 <includes>
                     <include>log4j.properties</include>
                     <include>hibernate.cfg.xml</include>
+                    <include>**/*.xml</include>
                 </includes>
             </resource>
         </resources>

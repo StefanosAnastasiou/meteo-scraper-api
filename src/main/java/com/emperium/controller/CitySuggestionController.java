@@ -1,12 +1,12 @@
 package com.emperium.controller;
 
+import com.emperium.errors.ErrorMessage;
 import com.emperium.service.CitySuggestionService;
 import com.emperium.service.CitySuggestionServiceImpl;
 import com.emperium.dto.suggest.CitySuggestionDTO;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 import jakarta.ws.rs.core.Response;
@@ -35,19 +35,21 @@ public class CitySuggestionController {
      */
     @GET
     @Path("/{input}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getCitiesSuggestions(@PathParam("input") String input) throws IOException, ParseException {
         logger.info("Getting city suggestions for input: " + input);
         List<CitySuggestionDTO> suggestionList =  citySuggestionService.getSuggestions(input);
 
         if (!suggestionList.isEmpty()) {
             return Response
-                    .status(Response.Status.OK.getStatusCode())
+                    .ok(suggestionList, MediaType.APPLICATION_JSON_TYPE)
                     .entity(suggestionList)
                     .build();
         }
         logger.info("No city suggestions found for input: " + input);
 
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(new ErrorMessage("No city suggestions found for input: " + input))
+                .type(MediaType.APPLICATION_JSON)
+                .build();
     }
 }

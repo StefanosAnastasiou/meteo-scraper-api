@@ -1,7 +1,7 @@
 package com.emperium.enums;
 
 /**
- * Enum used to represent DOM elements in {@link <a href="https://www.meteo.gr/">Meteo</a>}
+ * Enum used to represent DOM elements scraped from {@link <a href="https://www.meteo.gr/">Meteo</a>}
  */
 public enum DomElementsEnum {
     DATE ("//span[@class='dayNumbercf']"),

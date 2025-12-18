@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Class that holds all SQL operations.
+ * @author Stefanos Anastasiou
  */
 public class SQL {
 
@@ -30,29 +31,30 @@ public class SQL {
         return instance;
     }
 
-    private static final String INSERT_INTO_MEASUREMENT = "INSERT INTO Measurement(time, temperature, humidity, wind, phenomeno, day_id) VALUES" +
+    private static final String INSERT_INTO_PREDICTIONS = "INSERT INTO Predictions(time, temperature, humidity, wind, phenomeno, day_id) VALUES" +
             " (:time, :temperature, :humidity, :wind, :phenomeno, :day_id)";
 
-    private final String UPDATE_TEMPERATURE = "UPDATE Measurement SET temperature=:temperature WHERE id=:id";
+    private final String UPDATE_TEMPERATURE = "UPDATE Predictions SET temperature=:temperature WHERE id=:id";
 
-    private final String UPDATE_HUMIDITY = "UPDATE Measurement SET humidity=:humidity WHERE id=:id";
+    private final String UPDATE_HUMIDITY = "UPDATE Predictions SET humidity=:humidity WHERE id=:id";
 
-    private final String UPDATE_WIND = "UPDATE Measurement SET wind=:wind WHERE id=:id";
+    private final String UPDATE_WIND = "UPDATE Predictions SET wind=:wind WHERE id=:id";
 
-    private final String UPDATE_PHENOMENO = "UPDATE Measurement SET phenomeno=:phenomeno WHERE id=:id";
+    private final String UPDATE_PHENOMENO = "UPDATE Predictions SET phenomeno=:phenomeno WHERE id=:id";
 
-    private final String SELECT_CITY_PREDICTIONS_BY_DAY = "SELECT C.city, D.day, M.time, M.temperature, M.wind, M.humidity, M.phenomeno FROM Measurement AS M" +
+    private final String SELECT_CITY_PREDICTIONS_BY_DAY = "SELECT C.city, D.day, M.time, M.temperature, M.wind, M.humidity, M.phenomeno FROM Predictions AS M" +
             " JOIN Day AS D on M.day_id = D.id" +
             " JOIN City C on D.city_id = C.id where D.day=:day AND C.city=:city";
 
-    private final String SELECT_CITY_PREDICTIONS_BY_TIME = "SELECT C.city, D.day, M.time, M.temperature, M.wind, M.humidity, M.phenomeno FROM Measurement AS M" +
+    private final String SELECT_CITY_PREDICTIONS_BY_TIME = "SELECT C.city, D.day, M.time, M.temperature, M.wind, M.humidity, M.phenomeno FROM Predictions AS M" +
             " JOIN Day AS D on M.day_id = D.id" +
             " JOIN City C on D.city_id = C.id where D.day=:day AND C.city=:city AND M.time=:time";
 
-    private final String SELECT_CITY_PREDICTIONS = "SELECT C.city, D.day, M.time, M.temperature, M.wind, M.humidity, M.phenomeno FROM Measurement AS M" +
+    private final String SELECT_CITY_PREDICTIONS = "SELECT C.city, D.day, M.time, M.temperature, M.wind, M.humidity, M.phenomeno FROM Predictions AS M" +
             " JOIN Day AS D on M.day_id = D.id" +
             " JOIN City AS C on D.city_id = C.id where C.city=:city" +
-            " AND D.day >= current_date and M.id >= (SELECT MeasurementId(city))";
+            " AND D.day >= current_date ";
+//            "and M.id >= (SELECT PredictionId(city))";
 
     private static final String TEMPERATURE = "temperature";
     private static final String HUMIDITY = "humidity";
@@ -86,14 +88,14 @@ public class SQL {
     }
 
     /**
-     * Checks if measurements for a specified day are set
+     * Checks if predictions for a specified day are set
      *
      * @param day_id the day id
-     * @return true if measurements are set
+     * @return true if predictions are set
      */
-    public boolean dailyMeasurementsAreSet(int day_id) {
+    public boolean isDailyPredictionsSet(int day_id) {
         Session session = sessionFactory().openSession();
-        String hql = "SELECT * FROM Measurement WHERE day_id =:day_id";
+        String hql = "SELECT * FROM Predictions WHERE day_id =:day_id";
         Query query = session.createSQLQuery(hql);
         query.setParameter("day_id", day_id);
 
@@ -145,16 +147,16 @@ public class SQL {
     }
 
     /**
-     * Inserts measurements for a specified day.
+     * Inserts weather predictions for a specified day.
      *
      * @param predictions a List of {@link Predictions}
      * @param dayId        day id
      */
-    public void setDailyMeasurement(List<Predictions> predictions, int dayId) {
+    public void selectDailyPredictions(List<Predictions> predictions, int dayId) {
         for (Predictions prediction : predictions) {
             Session session = sessionFactory().openSession();
             Transaction tx = session.beginTransaction();
-            Query query = session.createSQLQuery(INSERT_INTO_MEASUREMENT);
+            Query query = session.createSQLQuery(INSERT_INTO_PREDICTIONS);
             query.setParameter(TIME, prediction.getTime());
             query.setParameter(TEMPERATURE, prediction.getTemperature());
             query.setParameter(HUMIDITY, prediction.getHumidity());
@@ -169,15 +171,15 @@ public class SQL {
     }
 
     /**
-     * Checks if measurements are the same and updates id necessary.
+     * Checks if weather predictions are the same and updates id necessary.
      *
      * @param day_id       the day id
      * @param predictions a list of {@link Predictions}
      */
-    public void checkAndUpdateDailyMeasurement(int day_id, List<Predictions> predictions) {
+    public void checkAndUpdateDailyPredictions(int day_id, List<Predictions> predictions) {
         Session session = sessionFactory().openSession();
         String sqlQuery = "SELECT * FROM " +
-                "(SELECT * FROM Measurement WHERE day_id = " + day_id + " ORDER BY id DESC LIMIT " + predictions.size() + ") " +
+                "(SELECT * FROM Predictions WHERE day_id = " + day_id + " ORDER BY id DESC LIMIT " + predictions.size() + ") " +
                 "a ORDER BY id;";
 
         Query query = session.createSQLQuery(sqlQuery);
@@ -189,25 +191,25 @@ public class SQL {
             if (data[2].equals(predictions.get(i).getTemperature())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_TEMPERATURE, predictions.get(i), data[0], TEMPERATURE);
+                updatePrediction(UPDATE_TEMPERATURE, predictions.get(i), data[0], TEMPERATURE);
             }
 
             if (data[3].equals(predictions.get(i).getHumidity())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_HUMIDITY, predictions.get(i), data[0], HUMIDITY);
+                updatePrediction(UPDATE_HUMIDITY, predictions.get(i), data[0], HUMIDITY);
             }
 
             if (data[4].equals(predictions.get(i).getWind())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_WIND, predictions.get(i), data[0], WIND);
+                updatePrediction(UPDATE_WIND, predictions.get(i), data[0], WIND);
             }
 
             if (data[5].equals(predictions.get(i).getPhenomeno())) {
                 assert true;
             } else {
-                updateMeasurement(UPDATE_PHENOMENO, predictions.get(i), data[0], PHENOMENO);
+                updatePrediction(UPDATE_PHENOMENO, predictions.get(i), data[0], PHENOMENO);
             }
             i++;
         }
@@ -217,7 +219,7 @@ public class SQL {
             for (int k = i; k < predictions.size(); k++) {
                 Session sess = sessionFactory().openSession();
                 Transaction tx = sess.beginTransaction();
-                Query ms = sess.createSQLQuery(INSERT_INTO_MEASUREMENT);
+                Query ms = sess.createSQLQuery(INSERT_INTO_PREDICTIONS);
                 ms.setParameter(TIME, predictions.get(k).getTime());
                 ms.setParameter(TEMPERATURE, predictions.get(k).getTemperature());
                 ms.setParameter(HUMIDITY, predictions.get(k).getHumidity());
@@ -240,7 +242,7 @@ public class SQL {
      * @param id          id the id
      * @param record      the record
      */
-    private void updateMeasurement(String hql, Predictions predictions, Object id, String record) {
+    private void updatePrediction(String hql, Predictions predictions, Object id, String record) {
         Session session = sessionFactory().openSession();
         Object val = switch (record) {
             case TEMPERATURE -> predictions.getTemperature();
@@ -280,12 +282,12 @@ public class SQL {
      *
      * @param city_id city id used to query and delete previous measurements
      */
-    public void deleteMeasurementsByDayId(int city_id) {
+    public void deletePredictionsByDayId(int city_id) {
         Session session = sessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            String hql = "DELETE FROM Measurement WHERE day_id BETWEEN (SELECT id FROM Day WHERE city_id=:city_id AND day < current_date ORDER BY id ASC LIMIT 1)" +
+            String hql = "DELETE FROM Predictions WHERE day_id BETWEEN (SELECT id FROM Day WHERE city_id=:city_id AND day < current_date ORDER BY id ASC LIMIT 1)" +
                     " AND (SELECT id FROM Day WHERE city_id=:city_id AND day < current_date ORDER BY id DESC LIMIT 1)";
             Query query = session.createSQLQuery(hql);
             query.setParameter("city_id", city_id);

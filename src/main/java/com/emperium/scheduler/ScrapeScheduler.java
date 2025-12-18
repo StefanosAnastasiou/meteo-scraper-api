@@ -45,14 +45,14 @@ public class ScrapeScheduler {
         trigger = newTrigger()
                 .withIdentity("CronTrigger")
 //    Uncomment these line for testing and comment the cron bellow so it can start immediately
-//                .startNow()
-//                .withSchedule(simpleSchedule()
-//                              .withIntervalInSeconds(480)
-//                             .repeatForever())
-//                .build();
-                .withSchedule(cronSchedule("0 55 23 * * ?"))   // Cron fires every night at 23:55
-                .forJob("scrapeJob")
+                .startNow()
+                .withSchedule(simpleSchedule()
+                              .withIntervalInSeconds(480)
+                             .repeatForever())
                 .build();
+//                .withSchedule(cronSchedule("0 55 23 * * ?"))   // Cron fires every night at 23:55
+//                .forJob("scrapeJob")
+//                .build();
 
         return this;
     }

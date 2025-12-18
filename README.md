@@ -17,10 +17,10 @@
 
 ## About The Project
 
-This project was developed for fun :laughing: . It is an implementation of scraping 
+Project developed for educational purposes. It is an implementation of scraping 
 with the use of HtmlUnit library. A cron job is set, with the use of Quartz Scheduler, and scraping starts automatically
 in a specified time every day. As soon as the scheduler starts it scrapes [Meteo](https://www.meteo.gr) website and fetches all 
-predictions measurement (time, temperature, humidity, wind speed, phenomenon) for every day - in 3-hour time intervals 
+weather predictions (time, temperature, humidity, wind speed, phenomenon) for every day - in 3-hour time intervals - 
 of every city in Greece. The values scraped are saved in a relational database. 
 Endpoints are then exposed so that the end user can view the meteorological predictions of current day and also the 
 upcoming days for every individual city and day available. 
@@ -38,12 +38,17 @@ Thus this application provides actual meteorological predictions.
 * [Apache Lucene](https://lucene.apache.org/)
 * [Docker](https://www.docker.com/)
 * [Docker compose](https://docs.docker.com/compose/)
+* [Liquibase](https://www.liquibase.com/)
 
 
 ## Getting Started
 
 A Cron job has been set up so that the application runs at 23:55 every night. You can change that in ScrapeScheduler
 class and make it run at any time desired, even multiple times a day.
+
+The first time that the application is run there will not be any predictions scraped so the endpoints will not return 
+any data. For this reason the application is shipped with sample data for one city - Thessaloniki and the endpoints
+can be tested before the cron job is fired (see {linke}Usage below) 
 
 ### Prerequisites
 This application utilizes docker and docker compose for deployment. Install [Docker](https://docs.docker.com/get-docker/) 
@@ -61,7 +66,7 @@ git clone https://github.com/StefanosAnastasiou/meteo-scraper-api.git
 ```
 2. cd into the directory
 
-3. Go to docker-compose.yml file and adapt the ```sh DATABASE_USERNAME ``` and ```sh DATABASE_PASSWORD```
+3. Go to docker-compose.yml file and adapt the ```DATABASE_USERNAME``` and ```DATABASE_PASSWORD```
  
 4. Build the application 
 ```sh
@@ -73,7 +78,7 @@ mvn clean install
 docker build . -t meteo-scraper-api:latest
 ```
 
-6. Run docker compose to start the containers - mysql, nginx and the application itself
+6. Run docker compose to start the containers - postgres db, nginx and the application itself
 ```sh 
 docker-compose -up
 ``` 
@@ -88,29 +93,35 @@ done and onwards, one endpoint is fetching predictions for a specific city and d
 and the other is fetching predictions for a city, for a specific time a day. Various tools can be used for the request, 
 postman, insomnia, curl etc.
 
-Example request that fetches all predictions available for a specified city:
+The following requests can be used to test the endpoint with the sample data that
+that ship with the application
+
+Fetches all predictions available for a Thessaloniki:
 ```sh
-http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ
+http://localhost/predictions/ΘΕΣΣΑΛΟΝΙΚΗ
 ```
 
-Example request that fetches predictions for a city for a specific day:
+Fetches predictions for Thessaloniki for a specified day:
 ```sh
-http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20
+http://localhost/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20
 ```
 
-Example request that fetches predictions for a city, for a given time of a day: 
+fetches predictions for Thessaloniki, for a given time of a day: 
 ```sh
-http://your_domain/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20/21:00:00
+http://localhost/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20/21:00:00
 ```
+
+Sample data are produced by Liquibase for the current date and onwards the application is run. For testing, make sure to
+adjust the dates above. 
 
 All the city names are also kept in a Lucene index so that they can be searched fast without having to query the 
-database. For this operation an endpoint is exposed e.g. :
+database. For this operation an endpoint is exposed e.g. the following request:
 
 ```sh
-http://your_domain/suggest/ΒΟΛ
+http://localhost/suggest/ΒΟΛ
 ```
 
-This will return all the available cities that contain "ΒΟΛ" e.g.
+will return all the available cities that contain "ΒΟΛ"
 
 ```yaml
 [
@@ -125,7 +136,8 @@ This will return all the available cities that contain "ΒΟΛ" e.g.
 ]
 ```
 
-This makes easy future frontend applications to search for cities fast without having to query.
+This makes easy future frontend applications (e.g. in search boxes) to search for cities fast without having to query
+the database.
 
 
 ## Contributing
