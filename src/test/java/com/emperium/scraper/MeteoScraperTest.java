@@ -1,7 +1,7 @@
 package com.emperium.scraper;
 
 import com.emperium.dao.db.CityDAO;
-import com.emperium.dao.db.DayDbDAO;
+import com.emperium.dao.db.DayDAO;
 import com.emperium.dao.db.PredictionsDAO;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class MeteoScraperTest {
     private CityDAO cityDAO;
 
     @Mock
-    private DayDbDAO dayDbDAO;
+    private DayDAO dayDAO;
 
     @Mock
     private PredictionsDAO predictionsDAO;

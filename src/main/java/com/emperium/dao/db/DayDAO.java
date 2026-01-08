@@ -5,7 +5,7 @@ import com.emperium.model.Day;
 
 import java.time.LocalDate;
 
-public interface DayDbDAO {
+public interface DayDAO {
 
     boolean isDaySet(LocalDate date, int city);
 

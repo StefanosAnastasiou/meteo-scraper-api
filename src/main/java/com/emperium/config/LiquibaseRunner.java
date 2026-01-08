@@ -10,7 +10,6 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * @author Steafanos Anastasiou
  */
@@ -18,13 +17,9 @@ public class LiquibaseRunner {
     private static Logger logger = Logger.getLogger(LiquibaseRunner.class);
 
     public static void run() throws LiquibaseException {
-        String url = System.getenv("DATABASE_URL");
         String user = System.getenv("DATABASE_USERNAME");
         String password = System.getenv("DATABASE_PASSWORD");
-//        String url = "jdbc:postgresql://database-meteo:5332/weatherDB?createDatabaseIfNotExist=true";
-//        String url = "jdbc:postgresql://localhost:5332/weatherDB?createDatabaseIfNotExist=true";
-//        String user = "root";
-//        String password = "password";
+        String url = "jdbc:postgresql://database-meteo:5432/weatherDB";
 
         Database database = DatabaseFactory.getInstance().openDatabase(
                 url,

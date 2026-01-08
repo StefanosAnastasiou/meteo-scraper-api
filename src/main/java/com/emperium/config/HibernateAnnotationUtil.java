@@ -12,7 +12,6 @@ public class HibernateAnnotationUtil {
         cfg.setProperty("hibernate.connection.username", System.getenv("DATABASE_USERNAME"));
         cfg.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
 
-
         return cfg.configure().buildSessionFactory();
     }
 

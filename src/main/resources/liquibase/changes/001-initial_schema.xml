@@ -20,7 +20,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="city_id" type="int">
-                <constraints nullable="false" foreignKeyName="fk_day_dity" references="city(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_day_city" references="city(id)"/>
             </column>
         </createTable>
         <createTable tableName="predictions">

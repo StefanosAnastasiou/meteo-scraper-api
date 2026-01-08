@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * Mapper Class that maps DTO to Model
+ * @author Stefanos Anastasiou
  */
 public class Mapper {
 
@@ -84,7 +85,6 @@ public class Mapper {
 
     /**
      * Inner class used for the transformation of the result to an intermediate DTO Object
-     *
      */
     @Getter
     @Setter

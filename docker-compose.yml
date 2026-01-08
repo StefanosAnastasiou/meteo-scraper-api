@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: 'password'
       POSTGRES_DB: 'weatherDB'
     ports:
-      - "5332:5432"
+      - "5432:5432"
   meteo:
     image: meteo-scraper-api:latest
     container_name: meteo

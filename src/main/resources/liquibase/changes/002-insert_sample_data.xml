@@ -5,46 +5,42 @@
 
     <changeSet id="1745489321748-1" author="Stefanos Anastasiou">
         <insert tableName="city">
-            <column name="id" value="1"/>
-            <column name="city" value="ΘΕΣΣΑΛΟΝΙΚΗ"/>
+            <!-- Random city generated. Random id so no duplicates ids clashing
+             when application starts -->
+            <column name="id" value="10000"/>
+            <column name="city" value="ΧΑΛΙΚΙ"/>
         </insert>
 
         <insert tableName="day">
             <column name="id" value="1"/>
             <column name="day" valueComputed="NOW()"/>
-            <column name="city_id" value="1"/>
+            <column name="city_id" value="10000"/>
         </insert>
         <insert tableName="day">
             <column name="id" value="2"/>
             <column name="day" valueComputed="NOW() + INTERVAL '1 day'"/>
-            <column name="city_id" value="1"/>
+            <column name="city_id" value="10000"/>
         </insert>
         <insert tableName="day">
             <column name="id" value="3"/>
             <column name="day" valueComputed="NOW() + INTERVAL '2 day'"/>
-            <column name="city_id" value="1"/>
+            <column name="city_id" value="10000"/>
         </insert>
         <insert tableName="day">
             <column name="id" value="4"/>
             <column name="day" valueComputed="NOW() + INTERVAL '3 day'"/>
-            <column name="city_id" value="1"/>
+            <column name="city_id" value="10000"/>
         </insert>
         <insert tableName="day">
             <column name="id" value="5"/>
             <column name="day" valueComputed="NOW() + INTERVAL '4 day'"/>
-            <column name="city_id" value="1"/>
+            <column name="city_id" value="10000"/>
         </insert>
         <insert tableName="day">
             <column name="id" value="6"/>
             <column name="day" valueComputed="NOW() + INTERVAL '5 day'"/>
-            <column name="city_id" value="1"/>
+            <column name="city_id" value="10000"/>
         </insert>
-        <insert tableName="day">
-            <column name="id" value="7"/>
-            <column name="day" valueComputed="NOW() + INTERVAL '6 day'"/>
-            <column name="city_id" value="1"/>
-        </insert>
-
 
         <!-- predictions -->
         <!-- day 1-->
@@ -147,7 +143,7 @@
             <column name="humidity" value="85"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="1"/>
+            <column name="day_id" value="2"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="12"/>
@@ -351,7 +347,7 @@
             <column name="humidity" value="83"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="34"/>
@@ -360,7 +356,7 @@
             <column name="humidity" value="86"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="35"/>
@@ -369,7 +365,7 @@
             <column name="humidity" value="85"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="36"/>
@@ -378,7 +374,7 @@
             <column name="humidity" value="67"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="37"/>
@@ -387,7 +383,7 @@
             <column name="humidity" value="50"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="38"/>
@@ -396,7 +392,7 @@
             <column name="humidity" value="62"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="39"/>
@@ -405,7 +401,7 @@
             <column name="humidity" value="68"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="40"/>
@@ -414,7 +410,7 @@
             <column name="humidity" value="69"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="5"/>
         </insert>
 
         <!-- day 6 -->
@@ -425,7 +421,7 @@
             <column name="humidity" value="83"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="42"/>
@@ -434,7 +430,7 @@
             <column name="humidity" value="86"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="43"/>
@@ -443,7 +439,7 @@
             <column name="humidity" value="85"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="44"/>
@@ -452,7 +448,7 @@
             <column name="humidity" value="67"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="45"/>
@@ -461,7 +457,7 @@
             <column name="humidity" value="50"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΑΙΗ ΣΥΝΝΕΦΙΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="46"/>
@@ -470,7 +466,7 @@
             <column name="humidity" value="62"/>
             <column name="wind" value="2 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΣΥΝΝΕΦΙΑΣΜΕΝΟΣ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="47"/>
@@ -479,7 +475,7 @@
             <column name="humidity" value="68"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΑΡΚΕΤΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
         <insert tableName="predictions">
             <column name="id" value="48"/>
@@ -488,7 +484,7 @@
             <column name="humidity" value="69"/>
             <column name="wind" value="3 Μπφ ΒΔ"/>
             <column name="phenomeno" value="ΛΙΓΑ ΣΥΝΝΕΦΑ"/>
-            <column name="day_id" value="4"/>
+            <column name="day_id" value="6"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

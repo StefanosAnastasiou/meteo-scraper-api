@@ -23,8 +23,6 @@ public class CitySuggestionDAOImpl implements CitySuggestionDAO {
         qp.setAllowLeadingWildcard(true);
 
         Query query = qp.parse("*" + city + "*");
-        TopDocs hits = searcher.search(query, 100);
-
-        return hits;
+        return searcher.search(query, 100);
     }
 }

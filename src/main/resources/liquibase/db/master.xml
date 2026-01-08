@@ -11,4 +11,10 @@
     <include file="liquibase/changes/002-insert_sample_data.xml"
              relativeToChangelogFile="false"/>
 
+    <include file="liquibase/changes/003-sync-day-sequences.xml"
+             relativeToChangelogFile="false"/>
+
+    <include file="liquibase/changes/004-sync-predictions-sequences.xml"
+             relativeToChangelogFile="false"/>
+
 </databaseChangeLog>

@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -173,7 +174,7 @@ public class SQL {
     /**
      * Checks if weather predictions are the same and updates id necessary.
      *
-     * @param day_id       the day id
+     * @param day_id      the day id
      * @param predictions a list of {@link Predictions}
      */
     public void checkAndUpdateDailyPredictions(int day_id, List<Predictions> predictions) {
@@ -393,7 +394,7 @@ public class SQL {
         Session session = sessionFactory().openSession();
         Query cityQuery = session.createSQLQuery(SELECT_CITY_PREDICTIONS_BY_DAY);
         cityQuery.setParameter(CITY, city);
-        cityQuery.setParameter(DAY, date);
+        cityQuery.setParameter(DAY, LocalDate.parse(date));
 
         List<Object[]> result = cityQuery.list();
         session.close();
@@ -413,8 +414,8 @@ public class SQL {
         Session session = sessionFactory().openSession();
         Query query = session.createSQLQuery(SELECT_CITY_PREDICTIONS_BY_TIME);
         query.setParameter(CITY, city);
-        query.setParameter(DAY, date);
-        query.setParameter(TIME, time);
+        query.setParameter(DAY, LocalDate.parse(date));
+        query.setParameter(TIME, LocalDateTime.parse(time));
 
         List<Object[]> result = query.list();
         session.close();

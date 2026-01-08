@@ -108,24 +108,20 @@ public class CityScraper {
     }
 
     public List<LocalDate> zipDaymonthToLocaDate(List<String> datesList, List<String> monthsList) {
-        final String firstDate = monthsList.get(0);
+//        final String firstDate = monthsList.get(0);
         final int nextYear = now.get(Calendar.YEAR);
 
         return IntStream
                 .range(0, Math.min(datesList.size(), monthsList.size()))
                 .mapToObj(i -> datesList.get(i) + "-" + Mappings.monthMappings.get(monthsList.get(i).trim()))
                 .map(stringDate -> {
-                    /** If length is 4 then we know that the days are in the range of the first 10 days of the month */
+                    /** If length is 4 then we know that the days are in the range of the first 9 days of the month */
                     if (stringDate.length() == 4) {
                         stringDate = "0" + stringDate;
-                        if (checkIfNextMonthIsNextYear(stringDate, 2, 4, firstDate)) {
+                        if (checkIfNextMonthIsNextYear(stringDate, 3, 5)) {
                             stringDate += "-" + nextYear;
                             return formatStringToLocalDate(stringDate);
                         }
-                    }
-                    if (stringDate.length() == 5) {
-                        if (checkIfNextMonthIsNextYear(stringDate, 3, 5, firstDate))
-                            return formatStringToLocalDate(stringDate);
                     }
 
                     int year = now.getInstance().get(Calendar.YEAR);
@@ -144,17 +140,7 @@ public class CityScraper {
     public List<String> daysToList(List<HtmlElement> datesEvent) {
         return datesEvent
                 .stream()
-//                .map(d -> d.getNodeName().replaceAll("[^\\d]", ""))
                 .map(d -> ((DomText) d.getFirstChild()).getData())
-//                .map(dt -> {
-//                    /** Remove sunset and sunrise digits and keep only date **/
-//                    if (dt.length() == 10) {
-//                        return dt.substring(0, 2);
-//                    } else if (dt.length() == 2){
-//                        return dt;
-//                    }
-//                    return "0" + dt.substring(0, 1);
-//                })
                 .collect(Collectors.toList());
     }
 
@@ -332,12 +318,6 @@ public class CityScraper {
         return predictions;
     }
 
-    private LocalDate stringToLocalDate(String day) throws ParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-        return LocalDate.parse(day, formatter);
-    }
-
     public List<LocalTime> timeToList(List<HtmlElement> eventTime) {
         return eventTime
                 .stream()
@@ -348,10 +328,6 @@ public class CityScraper {
 
     public List<Integer> tempToList(List<HtmlElement> temperature, int element) {
         return splitTempHumidity(temperature, element);
-    }
-
-    private List<Integer> humidityToList(List<HtmlElement> humidity, int element) {
-        return splitTempHumidity(humidity, element);
     }
 
     public List<String> windToList(List<HtmlElement> wind) {
@@ -373,6 +349,16 @@ public class CityScraper {
                 .stream()
                 .map(ph -> ph.asNormalizedText().trim())
                 .collect(Collectors.toList());
+    }
+
+    private List<Integer> humidityToList(List<HtmlElement> humidity, int element) {
+        return splitTempHumidity(humidity, element);
+    }
+
+    private LocalDate stringToLocalDate(String day) throws ParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        return LocalDate.parse(day, formatter);
     }
 
     /**
@@ -411,10 +397,9 @@ public class CityScraper {
      * @param stringDate the date as String that needs to be checked
      * @param startIndex the position of the starting index of the String checked.
      * @param endIndex   the position of ending index of the String checked
-     * @param firstDate  the date of the year
      * @return true if one of measurements belongs to new years eve false otherwise
      */
-    private boolean checkIfNextMonthIsNextYear(String stringDate, int startIndex, int endIndex, String firstDate) {
-        return stringDate.substring(startIndex, endIndex).equals("01") && firstDate.equals(firstDate);
+    private boolean checkIfNextMonthIsNextYear(String stringDate, int startIndex, int endIndex) {
+        return stringDate.substring(startIndex, endIndex).equals("01");
     }
 }

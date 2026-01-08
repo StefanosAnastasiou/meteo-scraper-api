@@ -66,7 +66,10 @@ git clone https://github.com/StefanosAnastasiou/meteo-scraper-api.git
 ```
 2. cd into the directory
 
-3. Go to docker-compose.yml file and adapt the ```DATABASE_USERNAME``` and ```DATABASE_PASSWORD```
+3. Go to docker-compose.yml file and adapt the values for
+   ```POSTGRES_USER``` and ```POSTGRES_PASSWORD``` in database image specification to your needs.
+ Make sure to also adapt the same values in
+ ```DATABASE_USERNAME``` and ```DATABASE_PASSWORD``` in the application image specification
  
 4. Build the application 
 ```sh
@@ -94,21 +97,21 @@ and the other is fetching predictions for a city, for a specific time a day. Var
 postman, insomnia, curl etc.
 
 The following requests can be used to test the endpoint with the sample data that
-that ship with the application
+that ship with the application, before the cron job starts.
 
-Fetches all predictions available for a Thessaloniki:
+Fetches all predictions available for ```ΧΑΛΙΚΙ```:
 ```sh
-http://localhost/predictions/ΘΕΣΣΑΛΟΝΙΚΗ
+http://localhost/predictions/ΧΑΛΙΚΙ
 ```
 
-Fetches predictions for Thessaloniki for a specified day:
+Fetches predictions for ```ΧΑΛΙΚΙ``` for a specified day:
 ```sh
-http://localhost/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20
+http://localhost/predictions/ΧΑΛΙΚΙ/2025-12-20
 ```
 
-fetches predictions for Thessaloniki, for a given time of a day: 
+fetches predictions for ```ΧΑΛΙΚΙ```, for a given time of a day: 
 ```sh
-http://localhost/predictions/ΘΕΣΣΑΛΟΝΙΚΗ/2025-12-20/21:00:00
+http://localhost/predictions/ΧΑΛΙΚΙ/2025-12-20/21:00:00
 ```
 
 Sample data are produced by Liquibase for the current date and onwards the application is run. For testing, make sure to

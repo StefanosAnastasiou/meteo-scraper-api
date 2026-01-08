@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * Controller class that returns suggestion cities for specific key input
+ * @author Stefanos Anastasiou
  */
 @Path("suggest")
 public class CitySuggestionController {

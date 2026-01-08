@@ -6,7 +6,7 @@ import com.emperium.utils.SQL;
 
 import java.time.LocalDate;
 
-public class DayDbDAOImpl implements DayDbDAO {
+public class DayDAOImpl implements DayDAO {
 
     @Override
     public boolean isDaySet(LocalDate date, int city_id) {

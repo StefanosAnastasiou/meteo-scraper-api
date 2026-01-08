@@ -4,33 +4,41 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name = "hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name = "hibernate.connection.url">jdbc:postgresql://database-meteo:3307/weatherDB?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Athens&amp;unicode=true&amp;characterEncoding=utf8mb4&amp;connectionCollation=utf8mb4_unicode_ci</property>
-<!--        <property name = "hibernate.connection.url">jdbc:mysql://localhost:3307/weatherDB?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Athens&amp;unicode=true&amp;characterEncoding=utf8mb4&amp;connectionCollation=utf8mb4_unicode_ci</property>-->
-<!--        <property name = "hibernate.connection.url">jdbc:postgresql://localhost:5332/weatherDB?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Athens&amp;unicode=true&amp;characterEncoding=utf8mb4&amp;connectionCollation=utf8mb4_unicode_ci</property>-->
-        <property name = "hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
-        <property name = "hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name = "hibernate.connection.characterEncoding">UTF-8</property>
-        <property name = "hibernate.connection.charSet">UTF-8</property>
-        <property name = "hibernate.connection.useUnicode">true</property>
-        <property name = "hibernate.show_sql">false</property>
-        <property name = "hibernate.hbm2ddl.auto">validate</property>
+        <!--        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>-->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://database-meteo:5432/weatherDB?useSSL=false&amp;
+            allowPublicKeyRetrieval=true&amp;
+            serverTimezone=Europe/Athens&amp;
+            unicode=true&amp;
+            characterEncoding=utf8mb4&amp;
+            connectionCollation=utf8mb4_unicode_ci
+        </property>
+        <property name="hibernate.current_session_context_class">
+            org.hibernate.context.internal.ThreadLocalSessionContext
+        </property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.connection.characterEncoding">UTF-8</property>
+        <property name="hibernate.connection.charSet">UTF-8</property>
+        <property name="hibernate.connection.useUnicode">true</property>
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.hbm2ddl.extra_physical_table_types">PARTITIONED TABLE</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
 
         <!-- c3po configuration -->
-        <property name = "c3p0.timeout">10</property>
-        <property name = "hibernate.c3po.min_size">501</property>
-        <property name = "hibernate.c3po.max_size">501</property>
-        <property name = "hibernate.c3p0.acquire_increment">502</property>
-        <property name = "hibernate.c3po.timeout">180</property>
-        <property name = "hibernate.c3po.max_statements">50</property>
+        <property name="c3p0.timeout">10</property>
+        <property name="hibernate.c3po.min_size">501</property>
+        <property name="hibernate.c3po.max_size">501</property>
+        <property name="hibernate.c3p0.acquire_increment">502</property>
+        <property name="hibernate.c3po.timeout">180</property>
+        <property name="hibernate.c3po.max_statements">50</property>
         <!-- Use for debugging -->
         <property name="hibernate.c3p0.unreturnedConnectionTimeout">10</property>
-        <property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces">true</property>
+        <!--        <property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces">true</property>-->
 
         <!-- mapping classes -->
-        <mapping class ="com.emperium.model.City"/>
-        <mapping class ="com.emperium.model.Day"/>
-        <mapping class ="com.emperium.model.Predictions"/>
+        <mapping class="com.emperium.model.City"/>
+        <mapping class="com.emperium.model.Day"/>
+        <mapping class="com.emperium.model.Predictions"/>
 
     </session-factory>
 </hibernate-configuration>

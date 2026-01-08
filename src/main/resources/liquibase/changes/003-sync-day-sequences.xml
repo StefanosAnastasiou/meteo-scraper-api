@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="sync-day-sequence" author="Stefanos Anastasiou" runOnChange="true">
+        <sql>
+            SELECT setval(
+                           pg_get_serial_sequence('day', 'id'),
+                           COALESCE((SELECT MAX(id) FROM day), 6)
+                   );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

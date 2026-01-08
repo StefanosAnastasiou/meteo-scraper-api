@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
+ * Main class to start Http Server and initialize application
  * @author Stefanos Anastasiou
  */
 public class Server {

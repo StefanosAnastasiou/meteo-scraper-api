@@ -2,7 +2,6 @@ package com.emperium.scraper;
 
 import com.emperium.dao.db.*;
 import com.emperium.model.City;
-import com.emperium.model.Day;
 import com.emperium.scheduler.ScrapeScheduler;
 import com.emperium.utils.Mappings;
 import org.apache.log4j.Logger;
@@ -18,16 +17,15 @@ import java.util.logging.Level;
 
 /**
  * Class responsible for taking all values scraped and adds them to database accordingly
- *
  * @author Stefanos Anastasiou
  */
 public class MeteoScraper implements Job {
 
     private Logger logger = Logger.getLogger(MeteoScraper.class);
     private CityDAO cityDAO = new CityDAOImpl();
-    private DayDbDAO dayDbDAO = new DayDbDAOImpl();
+    private DayDAO dayDAO = new DayDAOImpl();
     private PredictionsDAO measurementsDAO = new PredictionsDaoImpl();
-    private City modelCity;
+    private City city;
 
     private int city_id;
 
@@ -46,17 +44,17 @@ public class MeteoScraper implements Job {
             CityScraper cityScraper = new CityScraper(ck);
             cityScraper.scrapeCity();
 
-             modelCity = cityScraper.getCity();
+            city = cityScraper.getCity();
             /* The first time ever the application is run, City table will be empty.
-            * from the second time and onwards it will never be empty. We check here in order
-            * only to move to predictions*/
-            if(cityIsSet.test(modelCity.getName())) {
-                city_id = cityDAO.getCityId(modelCity.getName());
+             * from the second time and onwards it will never be empty. We check here in order
+             * only to move to predictions*/
+            if (isCitySet.test(city.getName())) {
+                city_id = cityDAO.getCityId(city.getName());
 
-                modelCity.getDays().forEach(day -> {
+                city.getDays().forEach(day -> {
 
-                    if(dayIsSet.test(day.getDay(), city_id)) {
-                        int day_id = dayDbDAO.getDayId(day.getDay(), city_id);
+                    if (isDaySet.test(day.getDay(), city_id)) {
+                        int day_id = dayDAO.getDayId(day.getDay(), city_id);
 
                         if (dailyMeasurementsAreSet.test(day_id)) {
                             measurementsDAO.checkAndUpdateDailyPredictions(day_id, day.getPredictions());
@@ -64,37 +62,46 @@ public class MeteoScraper implements Job {
                             measurementsDAO.setDailyPredictions(day.getPredictions(), day_id);
                         }
                     } else {
-                        insertRecords(true, day);
+                        City city = cityDAO.getCityById(city_id);
+                        dayDAO.insertRecords(day, city);
                     }
                 });
                 deletePreviousMeasurements.accept(city_id);
                 deletePreviousDays.accept(city_id);
             } else {
-                insertRecords(false, null);
+
+                city.getDays().forEach(day ->
+                        day.getPredictions().forEach(prediction ->
+                                prediction.setDay(day))
+                );
+                city.getDays().forEach(day ->
+                        day.setCity(city)
+                );
+                cityDAO.saveCity(city);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Predicate<String> cityIsSet = city -> cityDAO.isCitySet(city);
+    public Predicate<String> isCitySet = city -> cityDAO.isCitySet(city);
 
-    public BiPredicate<LocalDate, Integer> dayIsSet = (date, city_id) -> dayDbDAO.isDaySet(date, city_id);
+    public BiPredicate<LocalDate, Integer> isDaySet = (date, city_id) -> dayDAO.isDaySet(date, city_id);
 
     public Predicate<Integer> dailyMeasurementsAreSet = day_id -> measurementsDAO.isPredictionsSet(day_id);
 
     private Consumer<Integer> deletePreviousMeasurements = city_id -> measurementsDAO.deleteByCityId(city_id);
 
-    private Consumer<Integer> deletePreviousDays = city_id -> dayDbDAO.deleteById(city_id);
+    private Consumer<Integer> deletePreviousDays = city_id -> dayDAO.deleteById(city_id);
 
-    private void insertRecords(boolean cityExists, Day day) {
-        if(cityExists) {
-        City city = cityDAO.getCityById(city_id);
-            dayDbDAO.insertRecords(day, city);
-        } else {
-            cityDAO.saveCity(modelCity);
-        }
-    }
+//    private void insertRecords(boolean cityExists, Day day) {
+//        if(cityExists) {
+//        City city = cityDAO.getCityById(city_id);
+//            dayDAO.insertRecords(day, city);
+//        } else {
+//            cityDAO.saveCity(city);
+//        }
+//    }
 
     private void startJob() throws SchedulerException {
         ScrapeScheduler
@@ -116,7 +123,7 @@ public class MeteoScraper implements Job {
                     .forEach(job -> {
                         if (job.getJobDetail().getKey().getName().equals(ScrapeScheduler.SCRAPE_CITY_JOB)) {
                             try {
-//                                initiate();
+                                initiate();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
