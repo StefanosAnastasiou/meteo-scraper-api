@@ -1,6 +1,8 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
+##  UNDER MAINTENANCE. CURRENT CODE NOT WORKING
+
 
 ## Table of Contents
 
@@ -16,7 +18,6 @@
 * [Acknowledgements](#acknowledgements) 
 
 ## About The Project
-* UNDER MAINTENANCE. CURRENT CODE NOT WORKING
 
 This project was developed for fun :laughing: . It is an implementation of scraping 
 with the use of HtmlUnit library. Quartz Scheduler is used for scheduling the tasks at a specific time 
